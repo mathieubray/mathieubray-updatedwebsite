@@ -27,6 +27,7 @@ related:
       weight: 80
   threshold: 80
   toLower: yes
+disqusShortname: mathieubray
 permalinks:
   page:
     post: /:year/:month/:day/:slug
