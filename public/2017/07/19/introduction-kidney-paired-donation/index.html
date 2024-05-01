@@ -1,0 +1,890 @@
+<!doctype html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=4321&amp;path=livereload" data-no-instant defer></script><link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/androidstudio.min.css"
+  />
+  <script 
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js">
+  </script>
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/r.min.js">
+  </script>
+
+<head>
+  <meta charset="utf-8" />
+  <title>
+    
+      
+        An Introduction to Kidney Paired Donation, with ompr and ggraph |
+      Mathieu Bray
+
+  </title>
+
+  <meta name="generator" content="Hugo 0.125.4"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Mathieu Bray" />
+  <meta
+    name="description"
+    content="Statistics Leader / Dirigeant de Statistiques"
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.df52ef6442456ba809091d44dfa61a4c60e4f5142282e2a253b9144129c97fb1.css"
+      integrity="sha256-31LvZEJFa6gJCR1E36YaTGDk9RQiguKiU7kUQSnJf7E="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/css/syntax.min.166034ca0e7d8585b6763c3c4ab38da2a1b9e314b61f0905edf117ecc19bd4bc.css"
+      integrity="sha256-FmA0yg59hYW2djw8SrONoqG54xS2HwkF7fEX7MGb1Lw="
+      crossorigin="anonymous"
+      media="screen"
+    />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.icofavicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/favicon.icoapple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon.icofavicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon.icofavicon-16x16.png" />
+
+  <link rel="canonical" href="http://localhost:4321/2017/07/19/introduction-kidney-paired-donation/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"><meta name="twitter:title" content="An Introduction to Kidney Paired Donation, with ompr and ggraph">
+<meta name="twitter:description" content="Code for this worked example can be found on Github">
+
+
+
+  
+  <meta property="og:url" content="http://localhost:4321/2017/07/19/introduction-kidney-paired-donation/">
+  <meta property="og:site_name" content="Website">
+  <meta property="og:title" content="An Introduction to Kidney Paired Donation, with ompr and ggraph">
+  <meta property="og:description" content="Code for this worked example can be found on Github">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-07-19T00:00:00+00:00">
+    <meta property="article:modified_time" content="2017-07-19T00:00:00+00:00">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="Ompr">
+    <meta property="article:tag" content="Ggraph">
+    <meta property="article:tag" content="KPD">
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "An Introduction to Kidney Paired Donation, with ompr and ggraph",
+        "headline": "An Introduction to Kidney Paired Donation, with ompr and ggraph",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Code for this worked example can be found on Github
+
+
+      
+
+
+    ",
+        "inLanguage": "en",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:4321\/2017\/07\/19\/introduction-kidney-paired-donation\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "copyrightYear" : "2017",
+        "dateCreated": "2017-07-19T00:00:00.00Z",
+        "datePublished": "2017-07-19T00:00:00.00Z",
+        "dateModified": "2017-07-19T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Mathieu Bray",
+            "url": "http://localhost:4321/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http:\/\/localhost:4321\/favicons\/favicon.icofavicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "http:\/\/localhost:4321\/2017\/07\/19\/introduction-kidney-paired-donation\/",
+        "wordCount" : "2861",
+        "genre" : [ 
+      
+      "R"
+
+    ],
+        "keywords" : [ 
+      
+      "R"
+
+    
+      
+        ,
+
+      
+      "ompr"
+
+    
+      
+        ,
+
+      
+      "ggraph"
+
+    
+      
+        ,
+
+      
+      "KPD"
+
+    ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    .
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/professional-headshot.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Mathieu Bray</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Statistics Leader / Dirigeant de Statistiques</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://linkedin.com/in/mathieubray/"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Linkedin"
+            title="Linkedin"
+          >
+            <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/mathieubray/"
+            target="_blank"
+            rel="noopener me"
+            aria-label="GitHub"
+            title="GitHub"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+        <li class="sidebar__list-item">
+          <a
+            href="mailto:bray.mathieu@gmail.com"
+            target="_blank"
+            rel="noopener me"
+            aria-label="e-mail"
+            title="e-mail"
+          >
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Mathieu Bray
+        2024
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script><script>hljs.initHighlightingOnLoad();</script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    .
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/"
+              
+              title=""
+              >Blog</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >Bio</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/cv.pdf"
+              
+              title=""
+              >CV - English</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/cv_francais.pdf"
+              
+              title=""
+              >CV - Français</a
+            >
+          </li>
+        
+
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      .
+    "
+  >
+    
+    <div class="post__content">
+      
+        <h1>An Introduction to Kidney Paired Donation, with ompr and ggraph</h1>
+      
+      
+        <ul class="post__meta">
+          <li class="post__meta-item">
+            <em class="fas fa-calendar-day post__meta-icon"></em>
+            <span class="post__meta-text"
+              >
+                
+                  19 Jul 2017
+                
+
+              
+            </span>
+          </li>
+          <li class="post__meta-item">
+            <em class="fas fa-stopwatch post__meta-icon"></em>
+            <span class="post__meta-text">14-minute read</span>
+          </li>
+        </ul>
+      
+
+
+<p><em>Code for this worked example can be found on <a href="https://gist.github.com/mathieubray/8777a03c12cc5c09c1a1b955b482d24c">Github</a></em></p>
+<p>While most of my work posted here over the past year has been inspired by hockey statistics, the majority of my time is spent doing actual work on a much more important problem.</p>
+<p>Let’s say you know someone in need of a kidney transplant, and after careful reflection on the risks, you are willing to donate one of your kidneys to your friend. This is one option for kidney transplant candidates, to avoid potentially long waits on the deceased donor list and improve their quality of life compared to continued dialysis. However, in your case, we find that the transplant would be incompatible, due to a mismatch of blood types or antigen profiles between you and your friend, and therefore cannot proceed.</p>
+<p><img src="/post/Introduction-Kidney-Paired-Donation_files/figure-html/kpd_1-1.png" width="672" /></p>
+<p>Is all hope lost? Well, suppose there was another dialysis patient in the same boat, also with a willing but incompatible donor. Now, suppose it turns out you are compatible with the other patient, and her donor is compatible with your friend. By simply swapping donors, both patients receive a transplant!</p>
+<p><img src="/post/Introduction-Kidney-Paired-Donation_files/figure-html/kpd_2-1.png" width="672" /></p>
+<p>This is the idea behind <a href="https://en.wikipedia.org/wiki/Kidney_Paired_Donation">kidney-paired donation</a> (KPD), where incompatible donor-candidate pairs are pooled in an effort to find exchanges that allow for new transplant opportunities. Some transplant centers in the U.S. that run their own KPD programs, and partnerships exist between transplant centers, such as the <a href="http://paireddonation.org/">Alliance for Paired Donation</a>.</p>
+<p>The main question is, which exchanges should be selected for transplantation at any given time? In its simplest form, the goal is to achieve the highest number of transplants possible.</p>
+<p>In the rest of this post, I’ll lay out the mathematical formulation of KPD and work through an example, while also demonstrating some R packages I’ve been using lately.</p>
+<p>*Selected references for this topic: <a href="http://www.nber.org/papers/w10002">Roth et al, 2004</a>; <a href="http://www.nber.org/papers/w10698">Roth et al, 2005</a>; <a href="https://www.ncbi.nlm.nih.gov/pubmed/15840863">Segev et al, 2005</a>; <a href="http://www.ajkd.org/article/S0272-6386(10)01439-3/fulltext">Gentry et al, 2011</a>; <a href="https://link.springer.com/article/10.1007%2Fs12561-013-9082-0">Li et al, 2014</a></p>
+<div id="a-mathematical-model-for-kpd" class="section level3">
+<h3>A mathematical model for KPD</h3>
+<p>A KPD pool can be abstracted as a network/graph, where nodes represent <strong>pairs</strong> (i.e. a transplant candidate together with her donor), and directed edges are formed between two nodes when the donor from the first node is compatible with the transplant candidate in the second node.</p>
+<p>How are transplants obtained? Well, each donor has one kidney to give and each candidate need only receive one kidney. We require that for every donor who donates a kidney, that their paired candidate receive a kidney in return. A sequence of donations must end with the donor of the final pair donating to the candidate from the first pair. Thus, exchanges are closed cycles in our graph.</p>
+<p>KPD programs can also include candidates who join with several incompatible donors, compatible pairs, and altruistic donors (who start chains of transplants, with no requirement that the final donor return the favor to any particular candidate). All of these add their own subtle nuances to the KPD problem, but for the purposes of this demonstration, we will restrict ourselves to the case where each candidate joins the program with a single incompatible donor.</p>
+<p>What exchanges should be pursued for transplantation? KPD can be seen as an example of a cycle <a href="https://en.wikipedia.org/wiki/Packing_problems">packing problem</a>, where the goal is to find the disjoint set of cycles such that the combined weight of their constituent edges is maximized. In the KPD problem, we typically want the solution that admits the maximum number of transplants, and so each edge is effectively given a weight of 1. In general, this problem is NP-hard (unless the cycle size is restricted to 2, in which case the problem reduces to a <a href="https://en.wikipedia.org/wiki/Matching_(graph_theory)">maximum weighted matching problem</a>). However, with a manageable pool size, a restricted maximum cycle size and a reasonably sparse graph, the processing power will generally overcome the theoretical burden of the solving algorithms.</p>
+</div>
+<div id="solving-the-kpd-problem-using-ompr" class="section level3">
+<h3>Solving the KPD problem using ompr</h3>
+<p>We will generate an example KPD pool and determine the best set of exchanges to pursue. We will use the <code>ompr</code> package, by <a href="https://twitter.com/dirk_sch">Dirk Schumacher</a> to solve the <a href="https://dirkschumacher.github.io/ompr/">integer programming</a> problem. I will also demonstrate the <code>ggraph</code> package, for <a href="http://www.ggplot2-exts.org/ggraph.html">plotting networks</a>, by <a href="https://twitter.com/thomasp85">Thomas Lin Pedersen</a>.</p>
+<p>First, let’s load our handy libraries.</p>
+<pre class="r"><code>library(dplyr) # Take that, base R
+library(purrr) # &#39;map&#39; functions
+library(igraph) # R graph framework
+library(ggplot2) # For plotting
+library(ggraph) # Plotting graphs
+library(data.table) # &#39;rbindlist&#39; to combine list of data frames into one data frame
+
+library(ompr) # Mixed integer programming
+library(ompr.roi)
+library(ROI) # R optimization interface
+library(ROI.plugin.glpk) # Will use solver &#39;glpk&#39;</code></pre>
+<p>We start with a KPD pool with 20 pairs, where every possible match between two pairs has a 0.1 probability of forming an edge. This is an example of an <a href="https://en.wikipedia.org/wiki/Random_graph">Erdo-Renyi random graph</a>, which will suffice for our demonstration (in reality, since potential matches are evaluated based on blood type and antigen profiles, some nodes are inherently more likely to either be matched with or match to other pairs). We use the <code>sample_gnp</code> function from the <code>igraph</code> package to accomplish this.</p>
+<p>We use the <code>ggraph</code> package to visualize the KPD pool. This package allows for easy graph plotting of <code>igraph</code> objects, in the same vein as <code>ggplot2</code>. Edges are added to the plot using the <code>geom_edge_*</code> functions (here we simply use <code>geom_edge_link</code> to draw arrows, but other types of edges are possible). Similarly, nodes can be drawn using <code>geom_node_*</code> functions. Here we use <code>geom_node_point</code> to draw the nodes and <code>geom_node_text</code> to add labels. More information can be found <a href="http://www.data-imaginist.com/2017/ggraph-introduction-layouts/">here</a>.</p>
+<pre class="r"><code>set.seed(901) # Arbitrary seed, seemed to generate a decent network for this demo
+
+number_of_nodes  &lt;- 20
+
+kpd &lt;- sample_gnp(number_of_nodes, 0.1, directed=TRUE) # Here we generate our KPD as a Erdos-Renyi random graph
+
+# Plot graph
+ggraph(kpd,layout=&#39;linear&#39;,circular=TRUE) +
+  geom_edge_link(start_cap=circle(5,&quot;mm&quot;),
+                     end_cap=circle(5,&quot;mm&quot;),
+                 show.legend=FALSE,
+                 arrow=arrow(angle=20, 
+                             length=unit(0.1,&quot;inches&quot;),
+                             type=&quot;closed&quot;)) +
+  geom_node_point(size=12,color=&quot;red&quot;,alpha=0.6) +
+  geom_node_text(aes(label=1:20),size=5,color=&quot;black&quot;) +
+  theme_graph()</code></pre>
+<p><img src="/post/Introduction-Kidney-Paired-Donation_files/figure-html/kpd_3-1.png" width="672" /></p>
+<p>We collect the edges of the graph in a separate data frame which will come in handy later. You can confirm the edges shown below appear in the KPD network above.</p>
+<pre class="r"><code># Retrieve edges in the network
+edges &lt;- kpd %&gt;% get.edgelist %&gt;% data.frame
+
+edges %&gt;% rename(from=X1,to=X2) %&gt;% head</code></pre>
+<pre><code>##   from to
+## 1    9  1
+## 2   10  1
+## 3   13  1
+## 4   15  1
+## 5    1  2
+## 6    3  2</code></pre>
+<p>An obvious first step would be to find a set of possible exchanges in the pool. For this we need a function that extracts all the cycles from our network. Since I couldn’t seem to find an existing function to extract cycles (at least not to my knowledge? <code>igraph</code> didn’t have what I was looking for…), I ended up writing my own. You can check out the techincal details of the <code>get_cycles</code> function at the end of this post (or click <a href="#appendix">here</a>).</p>
+<p>The list of cycles, as well as the number of transplants each cycle admits, is shown below.</p>
+<pre class="r"><code># Collect all the cycles in the network
+
+cycle_size &lt;- 3
+
+cycles &lt;- get_cycles(number_of_nodes, edges, cycle_size)
+number_of_cycles &lt;- length(cycles)
+
+
+# Assign a label to each cycle
+cycle_strings &lt;- map_chr(cycles, function(x){ paste(x, collapse=&quot;-&quot;)})
+
+# Collect separately the size of each of the cycles in the network
+transplants &lt;- purrr::map_int(cycles,length)
+
+
+data.frame(cycle_strings=cycle_strings, transplants=transplants)</code></pre>
+<pre><code>##    cycle_strings transplants
+## 1         1-2-10           3
+## 2         1-4-13           3
+## 3           1-10           2
+## 4        1-10-13           3
+## 5        1-10-15           3
+## 6           1-13           2
+## 7         1-13-9           3
+## 8           2-10           2
+## 9         2-10-3           3
+## 10       7-14-13           3
+## 11       7-14-19           3
+## 12       9-14-13           3
+## 13         14-19           2</code></pre>
+<p>Let’s highlight these nodes and edges in our plot. We first need to extract the edges involved in each cycle. The <code>get_cycle_edges</code> function collects the edges involved in each cycle and combines them into a handy data frame.</p>
+<pre class="r"><code># For a vector representing a cycle, build data frame of the edges
+get_cycle_edges &lt;- function(cycle_node_list){
+  
+  edge_list &lt;- data.frame(X1=numeric(), X2=numeric())
+  
+  cycle_length &lt;- length(cycle_node_list)
+  
+  # Caution: FOR loop :( :( :(
+  for(i in 1:(cycle_length - 1)){
+    edge_list &lt;- rbind(edge_list, data.frame(X1 = cycle_node_list[i], X2 = cycle_node_list[i+1]))
+  }
+  
+  edge_list &lt;- rbind(edge_list, data.frame(X1 = cycle_node_list[cycle_length], X2 = cycle_node_list[1]))
+}</code></pre>
+<p>For each node and edge in the original pool, we tag whether it appears in a cycle or not, then plot the graph with manually assigned node colors, edge colors, widths and line types.</p>
+<pre class="r"><code># Get all edges that appear in cycles
+cycle_edges &lt;- map(cycles, get_cycle_edges) %&gt;% 
+  rbindlist %&gt;% 
+  unique %&gt;% 
+  as_tibble %&gt;% 
+  mutate(in.cycle = TRUE)
+
+# Mark each edge whether it appears in a cycle or not
+edges_enhanced &lt;- edges %&gt;%
+  left_join(cycle_edges,by=c(&quot;X1&quot;,&quot;X2&quot;)) %&gt;%
+  mutate(in.cycle = !is.na(in.cycle))
+
+E(kpd)$Cycle &lt;- edges_enhanced$in.cycle # Assign property to edge
+
+edges_enhanced %&gt;% rename(from=X1,to=X2) %&gt;% head</code></pre>
+<pre><code>##   from to in.cycle
+## 1    9  1     TRUE
+## 2   10  1     TRUE
+## 3   13  1     TRUE
+## 4   15  1     TRUE
+## 5    1  2     TRUE
+## 6    3  2     TRUE</code></pre>
+<pre class="r"><code># Get all nodes that appear in cycles
+cycle_nodes &lt;- cycles %&gt;% unlist %&gt;% unique %&gt;% sort 
+
+# Mark each node whether it appears in a cycle or not
+node_in_cycle &lt;- 1:number_of_nodes %in% cycle_nodes
+
+V(kpd)$Cycle &lt;- node_in_cycle # Assign property to node</code></pre>
+<pre class="r"><code># Plot network with nodes and edges in cycles highlighted
+ggraph(kpd, layout = &#39;circle&#39;) +
+  geom_edge_link(aes(edge_colour=Cycle,
+                     edge_width=Cycle,
+                     edge_linetype=Cycle), 
+                     start_cap=circle(5,&quot;mm&quot;),
+                     end_cap=circle(5,&quot;mm&quot;),
+                 arrow=arrow(angle=20, 
+                             length=unit(0.1,&quot;inches&quot;),
+                             type=&quot;closed&quot;)) +
+  geom_node_point(aes(color=Cycle),size=12,alpha=0.6,show.legend=F) +
+  geom_node_text(aes(label=1:20),size=5,color=&quot;black&quot;) +
+  scale_color_manual(values=c(&quot;red&quot;,&quot;magenta&quot;)) +
+  scale_edge_color_manual(values=c(&quot;black&quot;,&quot;magenta&quot;)) +
+  scale_edge_width_manual(values=c(0.5,1)) +
+  scale_edge_linetype_manual(values=c(&quot;dotted&quot;,&quot;solid&quot;)) +
+  theme_graph()</code></pre>
+<p><img src="/post/Introduction-Kidney-Paired-Donation_files/figure-html/kpd_4-1.png" width="672" /></p>
+<p>So which exchanges should we pursue? It’s kind of difficult to decide just looking at the picture. Even with the list of cycles above, the best course of action is not readily obvious.</p>
+<p>Again, we’re looking for the set of disjoint cycles that maximizes the number of transplants among the selected exchanges. The <code>ompr</code> package comes in handy here. It uses a very simple syntax in order to build a solver for mixed integer problems, like the KPD problem, on top of the R Optimization Interface (<code>ROI</code>). The main idea is to abstract our problem, initialized using <code>MIPModel</code>, with variables (<code>add_variable</code>), establish an objective (<code>set_objective</code>), add constraints (<code>add_constraint</code>), and then solve (<code>solve_model</code>). We use the free <code>glpk</code> solver here, which is passed as an argument to the <code>solve_model</code> function. The solution can then be extracted into a data frame using <code>get_solution</code>.</p>
+<p>We describe here the problem in such a way that we can solve it using <code>ompr</code> (this is a slightly different formulation than is common in the <a href="https://link.springer.com/article/10.1007%2Fs12561-013-9082-0">literature</a>). Let <span class="math inline">\(C\)</span> be the number of cycles and <span class="math inline">\(N\)</span> be the number of nodes. Let <span class="math inline">\(U_i\)</span> represent here the <em>utility</em> of the cycle. In our case, this is simply the number of transplants the cycle admits. In general, a cycle can be assigned any value of <span class="math inline">\(U_i\)</span>, reflecting certain clinical factors for example, and maximization will be effectively in terms of that utility.</p>
+<p>Let <span class="math inline">\(Y_i \in \{0,1\}\)</span> designate whether cycle <span class="math inline">\(i\)</span> should be pursued (1) or not (0). Similarly, let <span class="math inline">\(X_{ij} \in \{0,1\}\)</span> correspond to the status of node <span class="math inline">\(j\)</span> with respect to cycle <span class="math inline">\(i\)</span>. Obviously, the status of node <span class="math inline">\(j\)</span> is tied to the statuses of the cycles that contain it. In other words, if cycle <span class="math inline">\(i\)</span> is chosen (i.e. <span class="math inline">\(Y_i = 1\)</span>), and node <span class="math inline">\(j\)</span> is part of cycle <span class="math inline">\(i\)</span>, node <span class="math inline">\(j\)</span> is therefore chosen (i.e. <span class="math inline">\(X_{ij} = 1\)</span>). So node <span class="math inline">\(j\)</span> is part of cycle <span class="math inline">\(i \Rightarrow X_{ij} = Y_i\)</span>, <span class="math inline">\(i \in \{1,...,C\}, j \in \{1,...,N\}\)</span>. Obviously, a node can only appear in the solution once. So for each node <span class="math inline">\(j\)</span>, we want that <span class="math inline">\(\sum_{i}X_{ij} \leq 1\)</span>.</p>
+<p>The optimization problem is thus summarized as follows:</p>
+<p><span class="math display">\[\max_{\{Y_i\}} \sum_i Y_iU_i \\ st. \sum_{i}X_{ij} \leq 1, j \in \{1,...,N\}\\ \ X_{ij} = Y_i \ I(\mbox{Node } j \mbox{ is part of Cycle } i), i \in \{1,...,C\}, j \in \{1,...,N\}\]</span></p>
+<p>The solution is obtained below. Note that the <code>sum_expr</code> function signals the solver to sum over a set of variables. The <code>cycle_contains_node</code> function below uses <code>purrr::map2_lgl</code> in order to determine whether a node is part of a certain cycle. As such, our second constraint only applies to <span class="math inline">\((i,j)\)</span> combinations where node <span class="math inline">\(j\)</span> appears in cycle <span class="math inline">\(i\)</span>.</p>
+<pre class="r"><code># Function returns whether or not a node appears in a cycle
+cycle_contains_node &lt;- function(cycle,node){
+  purrr::map2_lgl(cycle,node, ~ .y %in% cycles[[.x]]) # A little confusing, but .x = &#39;cycle&#39;, .y = &#39;node&#39; here
+}
+
+model &lt;- MIPModel() %&gt;%
+  add_variable(y[i], i = 1:number_of_cycles, type = &quot;binary&quot;) %&gt;%
+  add_variable(x[i,j], i = 1:number_of_cycles, j = 1:number_of_nodes, type = &quot;binary&quot;) %&gt;%
+  set_objective(sum_expr(transplants[i] * y[i], i = 1:number_of_cycles), &quot;max&quot;) %&gt;%
+  add_constraint(sum_expr(x[i,j], i = 1:number_of_cycles) &lt;= 1, j = 1:number_of_nodes) %&gt;%
+  add_constraint(x[i,j] == y[i], i = 1:number_of_cycles, j = 1:number_of_nodes, cycle_contains_node(i,j)) %&gt;%
+  solve_model(with_ROI(solver = &quot;glpk&quot;, verbosity = 1))
+
+response &lt;- model %&gt;%
+  get_solution(y[i]) %&gt;%
+  select(-variable) %&gt;%
+  mutate(cycle_string = cycle_strings,
+         transplants = transplants)
+
+response</code></pre>
+<pre><code>##     i value cycle_string transplants
+## 1   1     0       1-2-10           3
+## 2   2     1       1-4-13           3
+## 3   3     0         1-10           2
+## 4   4     0      1-10-13           3
+## 5   5     0      1-10-15           3
+## 6   6     0         1-13           2
+## 7   7     0       1-13-9           3
+## 8   8     0         2-10           2
+## 9   9     1       2-10-3           3
+## 10 10     0      7-14-13           3
+## 11 11     1      7-14-19           3
+## 12 12     0      9-14-13           3
+## 13 13     0        14-19           2</code></pre>
+<p>In this network, we can obtain at most 9 transplants, via exchange cycles between pairs 1, 4 and 13; 2, 10 and 3; and 7, 14, 19. Notice that candidates 9 and 15 will not end up with a transplant at this time despite the fact they both currently appear in cycles. The solution is visualized below.</p>
+<pre class="r"><code># Extract chosen cycles
+chosen_cycles &lt;- response %&gt;% 
+  filter(value==1) %&gt;%
+  .$i
+
+solution &lt;- cycles[chosen_cycles]
+
+# Collect solution edges into data frame
+solution_edges &lt;- map(solution, get_cycle_edges) 
+
+for (i in 1:length(solution_edges)){ # Save solution number
+  solution_edges[[i]] &lt;- solution_edges[[i]] %&gt;%
+    mutate(solution = paste(&quot;Solution Cycle&quot;,i))
+}
+
+solution_edges &lt;- solution_edges %&gt;% 
+  rbindlist %&gt;% 
+  as_tibble</code></pre>
+<pre class="r"><code># Mark edges with the solution they appear in
+edge_in_solution &lt;- edges %&gt;%
+  left_join(solution_edges,by=c(&quot;X1&quot;,&quot;X2&quot;)) %&gt;%
+  mutate(solution = ifelse(is.na(solution),&quot;Not Selected&quot;,solution))
+
+E(kpd)$Solution &lt;- edge_in_solution$solution
+
+# Mark nodes with the solution they appear in
+node_in_solution &lt;- data.frame(X1=1:20) %&gt;%
+  left_join(solution_edges, by=&quot;X1&quot;) %&gt;%
+  mutate(solution=ifelse(is.na(solution),&quot;Not Selected&quot;,solution))
+
+V(kpd)$Solution &lt;- node_in_solution$solution</code></pre>
+<pre class="r"><code># Plot network
+ggraph(kpd, layout = &#39;circle&#39;) +
+  geom_edge_link(aes(edge_colour=Solution,
+                     edge_width=Solution,
+                     edge_linetype=Cycle),
+                     start_cap=circle(5,&quot;mm&quot;),
+                     end_cap=circle(5,&quot;mm&quot;),
+                 arrow=arrow(angle=20, 
+                             length=unit(0.1,&quot;inches&quot;),
+                             type=&quot;closed&quot;)) +
+  geom_node_point(aes(color=Solution),size=12,alpha=0.6,show.legend = FALSE) +
+  geom_node_text(aes(label=1:20),size=5,color=&quot;black&quot;) +
+  scale_color_manual(values=c(&quot;red&quot;,&quot;magenta&quot;,&quot;blue&quot;,&quot;green&quot;)) +
+  scale_edge_color_manual(values=c(&quot;black&quot;,&quot;magenta&quot;,&quot;blue&quot;,&quot;green&quot;)) +
+  scale_edge_width_manual(values=c(0.5,rep(1,times=3))) +
+  scale_edge_linetype_manual(values=c(&quot;dotted&quot;,rep(&quot;solid&quot;,times=3))) +
+  theme_graph()</code></pre>
+<p><img src="/post/Introduction-Kidney-Paired-Donation_files/figure-html/kpd_5-1.png" width="672" /></p>
+</div>
+<div id="appendix" class="section level3">
+<h3>Appendix</h3>
+<p>The following function performs a depth-first search of the graph, collecting cycles up to a user-specified maximum size. The basic idea is, for some initial node, to visit each of its connections, building up a stack of nodes along the way. We save the stack of nodes if the most recently added node closes a loop with the initial node. If there are no more connections, or the maximum specified cycle size has been reached, we pop the stack and continue. It is essentially <a href="https://en.wikipedia.org/wiki/Dijkstra&#39;s_algorithm">Djikstra’s algorithm</a>, with a cap on the depth and a check at each step as to whether the stack represents a closed loop. More details can be found in the code comments.</p>
+<pre class="r"><code># Depth-First Search for Cycles in a Network
+
+get_cycles &lt;- function(nodes, edgelist, max_cycle_size){
+  
+  cycle_list &lt;- list() # Collect found cycles
+  cycles &lt;- 0 # Count cycles
+  
+  # Does edge exist in network from &#39;from&#39; node to &#39;to&#39; node?
+  incidence &lt;- function(from,to){
+    return(edgelist %&gt;% filter(X1==from, X2==to) %&gt;% nrow &gt; 0)
+  }
+  
+  # Retrieve first unvisited child of &#39;current&#39; node (after &#39;from&#39; node)
+  # Returns -1 if no child found
+  get_child &lt;- function(from, current, visited){
+    
+    if (from != nodes){
+      for (j in (from + 1):nodes){
+        if (incidence(current,j) &amp; !visited[j]){
+          return(j)
+        }
+      }
+    }
+    
+    return(-1)
+  }
+  
+  # Use stack to store and evaluate current set of nodes
+  node_stack &lt;- numeric()
+  
+  # Keep note of the first node in the stack (head node)
+  current_head_node &lt;- 1
+  
+  # Keep track of whether each node has been explored already
+  visited &lt;- rep(FALSE, nodes)
+  
+  
+  # Iterate over all nodes
+  while (current_head_node &lt;= nodes){
+    
+    # Place new head node in the stack and mark as visited
+    node_stack &lt;- c(node_stack, current_head_node)
+    visited[current_head_node] &lt;- TRUE 
+    
+    # Get the first child of this node
+    v &lt;- get_child(current_head_node, current_head_node, visited)
+    
+    while(length(node_stack) &gt; 0){
+      
+      # If there are no children to explore
+      if (v == -1){
+        
+        # Pop node from stack
+        backtrack_node &lt;- node_stack %&gt;% tail(1)
+        node_stack &lt;- node_stack %&gt;% head(-1)
+        
+        if (backtrack_node == current_head_node){
+          # We&#39;ve popped the head node from the stack, which is now empty
+          # Break from the loop and start a new stack with a new head node
+          visited[backtrack_node] &lt;- FALSE
+          break
+        }
+        
+        # Mark the popped node as not visited
+        visited[backtrack_node] &lt;- FALSE
+        
+        # Get new node from top of stack and get its next unvisited child
+        new_top_node &lt;- node_stack %&gt;% tail(1)
+        v &lt;- get_child(backtrack_node, new_top_node, visited)
+        
+        
+      } else {
+        
+        # Place new node on top of stack and mark as visited
+        node_stack &lt;- c(node_stack, v)
+        visited[v] &lt;- TRUE
+        
+        # If this node connects back to the head node, we&#39;ve found a cycle!
+        if (incidence(v,current_head_node)){
+          
+          # Check size constraints (may be unnecessary...)
+          if (length(node_stack) &lt;= max_cycle_size){
+            
+            # Add cycle to list
+            cycles &lt;- cycles + 1
+            cycle_list[[cycles]] &lt;- node_stack
+          }
+          
+        }
+        
+        if (length(node_stack) &gt;= max_cycle_size){
+          # If stack has reached the maximum cycle size, signal that there are no
+          # more children to explore
+          v &lt;- -1
+        } else {
+          # Else, grow stack with child of current node
+          v &lt;- get_child(current_head_node, v, visited)
+        }
+      }
+    }
+    
+    # Advance head node 
+    current_head_node &lt;- current_head_node + 1
+    
+  }
+  
+  return(cycle_list)
+}</code></pre>
+</div>
+</div>
+    <div class="post__footer">
+      
+        <span><a class="category" href="/categories/r/">R</a></span>
+
+
+      
+
+      
+        <span><a class="tag" href="/tags/r/">R</a><a class="tag" href="/tags/ompr/">ompr</a><a class="tag" href="/tags/ggraph/">ggraph</a><a class="tag" href="/tags/kpd/">KPD</a></span>
+
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Mathieu Bray
+        2024
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script><script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

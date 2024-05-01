@@ -1,0 +1,1147 @@
+<!doctype html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=4321&amp;path=livereload" data-no-instant defer></script><link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/androidstudio.min.css"
+  />
+  <script 
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js">
+  </script>
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/r.min.js">
+  </script>
+
+<head>
+  <meta charset="utf-8" />
+  <title>
+    
+      
+        Exploratory Analysis on SNL Episode Ratings |
+      Mathieu Bray
+
+  </title>
+
+  <meta name="generator" content="Hugo 0.125.4"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Mathieu Bray" />
+  <meta
+    name="description"
+    content="Statistics Leader / Dirigeant de Statistiques"
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.df52ef6442456ba809091d44dfa61a4c60e4f5142282e2a253b9144129c97fb1.css"
+      integrity="sha256-31LvZEJFa6gJCR1E36YaTGDk9RQiguKiU7kUQSnJf7E="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/css/syntax.min.166034ca0e7d8585b6763c3c4ab38da2a1b9e314b61f0905edf117ecc19bd4bc.css"
+      integrity="sha256-FmA0yg59hYW2djw8SrONoqG54xS2HwkF7fEX7MGb1Lw="
+      crossorigin="anonymous"
+      media="screen"
+    />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.icofavicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/favicon.icoapple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon.icofavicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon.icofavicon-16x16.png" />
+
+  <link rel="canonical" href="http://localhost:4321/2017/11/25/snl-charts/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"><meta name="twitter:title" content="Exploratory Analysis on SNL Episode Ratings">
+<meta name="twitter:description" content="Code and data can be found on Github
+Figured I should chime in here since it’s been… let’s see here… ah, 4 months.">
+
+
+
+  
+  <meta property="og:url" content="http://localhost:4321/2017/11/25/snl-charts/">
+  <meta property="og:site_name" content="Website">
+  <meta property="og:title" content="Exploratory Analysis on SNL Episode Ratings">
+  <meta property="og:description" content="Code and data can be found on Github
+Figured I should chime in here since it’s been… let’s see here… ah, 4 months.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-11-25T00:00:00+00:00">
+    <meta property="article:modified_time" content="2017-11-25T00:00:00+00:00">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="IMDb">
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Exploratory Analysis on SNL Episode Ratings",
+        "headline": "Exploratory Analysis on SNL Episode Ratings",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Code and data can be found on Github\nFigured I should chime in here since it’s been… let’s see here… ah, 4 months.
+
+
+      
+
+
+    ",
+        "inLanguage": "en",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:4321\/2017\/11\/25\/snl-charts\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "copyrightYear" : "2017",
+        "dateCreated": "2017-11-25T00:00:00.00Z",
+        "datePublished": "2017-11-25T00:00:00.00Z",
+        "dateModified": "2017-11-25T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Mathieu Bray",
+            "url": "http://localhost:4321/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http:\/\/localhost:4321\/favicons\/favicon.icofavicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "http:\/\/localhost:4321\/2017\/11\/25\/snl-charts\/",
+        "wordCount" : "5286",
+        "genre" : [ 
+      
+      "R"
+
+    ],
+        "keywords" : [ 
+      
+      "R"
+
+    
+      
+        ,
+
+      
+      "IMDb"
+
+    ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    .
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/professional-headshot.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Mathieu Bray</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Statistics Leader / Dirigeant de Statistiques</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://linkedin.com/in/mathieubray/"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Linkedin"
+            title="Linkedin"
+          >
+            <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/mathieubray/"
+            target="_blank"
+            rel="noopener me"
+            aria-label="GitHub"
+            title="GitHub"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+        <li class="sidebar__list-item">
+          <a
+            href="mailto:bray.mathieu@gmail.com"
+            target="_blank"
+            rel="noopener me"
+            aria-label="e-mail"
+            title="e-mail"
+          >
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Mathieu Bray
+        2024
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script><script>hljs.initHighlightingOnLoad();</script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    .
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/"
+              
+              title=""
+              >Blog</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >Bio</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/cv.pdf"
+              
+              title=""
+              >CV - English</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/cv_francais.pdf"
+              
+              title=""
+              >CV - Français</a
+            >
+          </li>
+        
+
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      .
+    "
+  >
+    
+    <div class="post__content">
+      
+        <h1>Exploratory Analysis on SNL Episode Ratings</h1>
+      
+      
+        <ul class="post__meta">
+          <li class="post__meta-item">
+            <em class="fas fa-calendar-day post__meta-icon"></em>
+            <span class="post__meta-text"
+              >
+                
+                  25 Nov 2017
+                
+
+              
+            </span>
+          </li>
+          <li class="post__meta-item">
+            <em class="fas fa-stopwatch post__meta-icon"></em>
+            <span class="post__meta-text">25-minute read</span>
+          </li>
+        </ul>
+      
+
+
+<p><em>Code and data can be found on <a href="https://github.com/mathieubray/SNL">Github</a></em></p>
+<p>Figured I should chime in here since it’s been… let’s see here… ah, 4 months. I had previously <a href="https://twitter.com/mathieubray/status/840665088046567424">promised</a> to write about some <a href="https://github.com/mathieubray/Hockey">NCAA hockey projects</a> I had been working on. That… will have to wait -_-. In the meantime, let’s look instead at some Saturday Night Live data!</p>
+<p>For those not familiar, <a href="https://www.nbc.com/saturday-night-live">Saturday Night Live</a>, commonly abbreviated as ‘SNL’, is a comedy-variety show that airs live on <a href="https://www.nbc.com/">NBC</a> on select Saturday nights over the course of a ‘season’, which runs from September through May. SNL first aired in 1975, and is currently airing its 43rd season. Each episode features a celebrity guest host who participates in most of the sketches, along with a musical guest who performs twice over the course of the show.</p>
+<p>A simple question came to me after watching a disappointing episode of SNL hosted by <a href="https://en.wikipedia.org/wiki/Kumail_Nanjiani">Kumail Nanjiani</a> a few weeks ago. This episode just happened to be the third in a sequence of episodes airing over consecutive weeks. Knowing the <a href="http://www.businessinsider.com/saturday-night-live-how-an-episode-is-put-together-2015-7">grueling schedule</a> that SNL writers operate on, I was curious if, as in <a href="https://www.broadstreethockey.com/2013/4/8/4188626/philadelphia-flyers-goaltending-stats-back-to-back-games">sports such as hockey</a>, some kind of fatigue, in this case something akin to writer’s block, may impact the quality of an episode.</p>
+<p>In this post, I’ll perform exploratory analysis on SNL episode quality to get an idea of whether or not my ‘writer’s fatigue’ hypothesis makes sense. Episode quality will be based on averaged ratings (on a 0-10 scale) of users on <a href="https://www.imdb.com">IMDb</a>, inspired by previous analyses of TV shows such as <a href="http://www.nathancunn.com/2017-10-26-simpsons-decline/">‘The Simpsons’</a>. I’ll note that, while writing this post, I thought the most recent episode hosted by <a href="https://en.wikipedia.org/wiki/Chance_the_Rapper">Chance the Rapper</a> was fantastic, and also happened to be the third episode in a stretch of three consecutive weeks of episodes.</p>
+<p>I’ll also make clear right at the onset that this post is meant mostly as a fun exercise. There are a number of caveats to using IMDb data, such as the variable number of votes given to each episode, the composition of users that determine the ratings, and the rounding of final ratings to 1 decimal place. SNL ratings in particular are likely highly driven by topical events that occurred around the time of each episode, as well as the quality/notoriety/likability of the host. While a more determined analyst would do well to adjust for these factors, a much more involved cleaning job on the data will likely be required (something for the future perhaps?).</p>
+<p>All that being said, let’s get right into it, starting by loading our handy libraries.</p>
+<pre class="r"><code>library(dplyr)     # Lifeblood of data science
+library(rvest)     # Scrape scrape scrape
+library(purrr)     # &#39;map&#39; function
+library(zoo)       # &#39;locf&#39; function for carrying last observation forward
+library(lubridate) # Working with dates 
+library(stringr)   # Working with strings
+library(ggplot2)   # Plots
+library(ggridges)  # Fancy plots
+library(viridis)   # User-friendly color scheme</code></pre>
+<div id="scrape-scrape-scrape" class="section level3">
+<h3>Scrape, Scrape, Scrape!</h3>
+<p>For those not interested in the data collection portion of this post, but who still want to play along at home, full data can be found <a href="https://github.com/mathieubray/SNL/tree/master/Data">here</a>, and feel free to <a href="#snl-ratings-distributions">skip</a> directly to the analysis section.</p>
+<p>As is usually the case for any project, the required data will have to be collected in pieces from disparate sources, cleaned separately and merged into a tidy format. First we need the ratings of each episode, which we scrape from <a href="http://www.imdb.com/title/tt0072562/epdate">IMDb</a> using the <code>read_html</code>, <code>html_nodes</code>, and <code>html_table</code> functions from the <code>rvest</code> package. The main table of interest is the first table collected under the <code>'table'</code> tag, which we convert to an R data frame.</p>
+<pre class="r"><code>url &lt;- &quot;http://www.imdb.com/title/tt0072562/epdate&quot; #IMDb URL
+
+raw.ratings &lt;- url %&gt;% 
+  read_html %&gt;% 
+  html_nodes(&#39;table&#39;) %&gt;% # Ratings table is taggeed as &#39;table&#39;
+  html_table(header=F) %&gt;% # Extract tables
+  `[[`(1) %&gt;% # Retain first table with ratings
+  data.frame(stringsAsFactors=F) # Convert to data frame</code></pre>
+<pre><code>##    X1                                       X2         X3        X4
+## 1   #                                  Episode UserRating UserVotes
+## 2 1.1    George Carlin/Billy Preston/Janis Ian        7.6       266
+## 3 1.2      Paul Simon/Randy Newman/Phoebe Snow        6.5       158
+## 4 1.3                               Rob Reiner        7.0       129
+## 5 1.4           Candice Bergen/Esther Phillips        7.2       126
+## 6 1.5 Robert Klein/ABBA, Loudon Wainwright III        6.8       109
+##                                           X5
+## 1                                           
+## 2 1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n\n7.6/10\nX
+## 3 1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n\n6.5/10\nX
+## 4 1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n\n7.0/10\nX
+## 5 1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n\n7.2/10\nX
+## 6 1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n\n6.8/10\nX</code></pre>
+<p>I prefer scraping tables specifying <code>header=F</code>, as the headers of tables on websites tend to be in odd formats that screw up the scraping process (plus I usually end up changing variable names anyway). We remove the first row in our scraped table (which contains the headers we see on the web), then remove the last column of gibberish, and assign our own variable names. From there, we extract the season number from the first column of data, which is the number that appears before the <code>.</code> in that field. Finally, we filter out episodes from the current season (the 43rd season).</p>
+<pre class="r"><code># Helper function for extracting the season from the full episode number
+extract.season &lt;- function(x){
+  
+  token.list &lt;- x %&gt;%
+    as.character %&gt;%
+    strsplit(split=&quot;.&quot;, fixed=T) %&gt;% # Season number appears before the &#39;.&#39;
+    unlist
+  
+  return(as.numeric(token.list[1]))  # Convert to numeric before returning
+}
+
+# Clean SNL ratings data
+snl.ratings &lt;- raw.ratings %&gt;%
+  tail(-1) %&gt;% #  Remove first row
+  select(1:4) %&gt;% # Retain first 4 columns
+  rename(EpisodeNumber = X1,
+         Guests = X2,
+         Rating = X3,
+         Votes = X4) %&gt;% # Rename variables
+  rowwise %&gt;%
+  mutate(Season = extract.season(EpisodeNumber)) %&gt;% # Get season number from episode number
+  select(Season, Guests, Rating, Votes) %&gt;% # Retain variables
+  ungroup %&gt;%
+  filter(Season &lt; 43) # Not going to consider episodes from the currently airing season</code></pre>
+<pre><code>##   Season                                   Guests Rating Votes
+## 1      1    George Carlin/Billy Preston/Janis Ian    7.6   266
+## 2      1      Paul Simon/Randy Newman/Phoebe Snow    6.5   158
+## 3      1                               Rob Reiner    7.0   129
+## 4      1           Candice Bergen/Esther Phillips    7.2   126
+## 5      1 Robert Klein/ABBA, Loudon Wainwright III    6.8   109
+## 6      1                              Lily Tomlin    7.2   108</code></pre>
+<p>So we have our ratings, but if we are to look at how breaks and consecutive runs of episodes affect ratings, we also need the date each episode aired (the ‘airdate’), which is not found in the data we collected. Various sources contain airdate information, including <a href="http://www.imdb.com/title/tt0072562/episodes">IMDb</a>, though not in a handy table format, meaning a scraper would be quite a bit more tedious to design. Luckily, the airdates happen to be conveniently laid out on <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes">Wikipedia</a>, and so we’ll simply go with that.</p>
+<p>Tables of airdates, one for each season, are spread across three sections. We collect all tables across all three sections and bind these together. Note that tables in the last section contain some TV ratings information from Nielsen (these estimate number of viewers, not necessarily episode quality), which we omit when combining.</p>
+<pre class="r"><code># Helper function for scraping SNL airdate tables from Wikipedia
+extract.wiki.table &lt;- function(url){
+  
+  raw.data &lt;- url %&gt;% 
+    read_html %&gt;% 
+    html_nodes(&#39;.wikiepisodetable&#39;) %&gt;% # Tables from wikipedia page are tagged with &#39;.wikiepisodetable&#39;
+    map(html_table, header=F, fill=T) %&gt;% # Convert scraped tables to data frames
+    bind_rows # Bind the set of data frames into one large data frame
+  
+  return(raw.data)
+}
+
+# Gather and combine raw SNL airdate tables
+raw.snl.1 &lt;- extract.wiki.table(&quot;https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes_(seasons_1%E2%80%9315)#Episodes&quot;)
+raw.snl.2 &lt;- extract.wiki.table(&quot;https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes_(seasons_16%E2%80%9330)#Episodes&quot;)
+raw.snl.3 &lt;- extract.wiki.table(&quot;https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes#Episodes&quot;) %&gt;% select(1:5) # This table has the number of viewers in an extra column, which we leave out
+
+raw.snl.combined &lt;- rbind(raw.snl.1,raw.snl.2,raw.snl.3) # Bind the three data frames together</code></pre>
+<pre><code>##   X           X1             X2             X3
+## 1 1 No.\noverall No. in\nseason           Host
+## 2 2            1              1  George Carlin
+## 3 3            2              2     Paul Simon
+## 4 4            3              3     Rob Reiner
+## 5 5            4              4 Candice Bergen
+## 6 6            5              5   Robert Klein
+##                                                               X4
+## 1                                               Musical guest(s)
+## 2                                      Billy Preston &amp; Janis Ian
+## 3 Randy Newman, Phoebe Snow, Art Garfunkel &amp; Jessy Dixon Singers
+## 4                                                           none
+## 5                                                Esther Phillips
+## 6                                   ABBA &amp; Loudon Wainwright III
+##                               X5
+## 1              Original air date
+## 2  October 11, 1975 (1975-10-11)
+## 3  October 18, 1975 (1975-10-18)
+## 4  October 25, 1975 (1975-10-25)
+## 5  November 8, 1975 (1975-11-08)
+## 6 November 15, 1975 (1975-11-15)</code></pre>
+<p>Other than removing the website headers collected within the table (conveniently the string ‘Original air date’ appears in each case in the fifth column) and renaming our variables, we extract the airdate from the final column and convert to a more R-friendly format using <code>lubridate</code>.</p>
+<pre class="r"><code># Helper function for extracting the correct airdate
+extract.airdate &lt;- function(airdate){
+  
+  clean.airdate &lt;- airdate %&gt;% 
+    strsplit(split=&quot;(&quot;, fixed=T) %&gt;% # Split off date string after &#39;(&#39;
+    unlist %&gt;% # Convert to vector
+    `[`(1) %&gt;% # Extract first element
+    trimws %&gt;% # Remove whitespace from beginning and end
+    mdy # Convert to simple date format
+  
+  return(clean.airdate)
+}
+
+# Clean SNL airdate data
+snl.airdates &lt;- raw.snl.combined %&gt;% 
+  rename(EpNumber = X1,
+         SeasonEpNumber = X2,
+         Host = X3,
+         MusicalGuest = X4,
+         AirDate = X5) %&gt;% # Rename variables
+  filter(AirDate != &quot;Original air date&quot;) %&gt;% # Remove rows not pertaining to actual episodes
+  mutate(EpNumber = as.numeric(EpNumber),
+         SeasonEpNumber = as.numeric(SeasonEpNumber)) %&gt;% # Convert numeric columns
+  rowwise %&gt;%
+  mutate(AirDate = extract.airdate(AirDate)) %&gt;% # Convert airdate to R friendly format
+  ungroup</code></pre>
+<p>Notice this data set does not contain the season number, but since we have the episode number within each season, we can extract the first episode of each season and assign its season number, then create a new variable in the original data set with the season number for these episodes and ’NA’s for the rest. We then use the <code>locf</code> function from the <code>zoo</code> package to carry the last observation forward, filling out the season number for the remaning episodes.</p>
+<pre class="r"><code># Extract first episodes from each season and assign a season number
+first.episodes &lt;- snl.airdates %&gt;%
+  filter(SeasonEpNumber == 1) %&gt;%
+  mutate(Season = 1:n()) %&gt;%
+  select(EpNumber, Season)</code></pre>
+<pre><code>##   EpNumber Season
+## 1        1      1
+## 2       25      2
+## 3       47      3
+## 4       67      4
+## 5       87      5
+## 6      107      6</code></pre>
+<pre class="r"><code>snl.airdates &lt;- snl.airdates %&gt;%
+  left_join(first.episodes, by=&quot;EpNumber&quot;) %&gt;% # Bind season number based on episode number
+  mutate(Season = na.locf(Season)) %&gt;% # Carry season number forward to remaining episodes in season
+  select(Season, SeasonEpNumber, Host, MusicalGuest, AirDate) %&gt;% # Retain variables of interest
+  filter(Season &lt; 43) # Not going to consider the season currently airing</code></pre>
+<pre><code>##   Season SeasonEpNumber           Host
+## 1      1              1  George Carlin
+## 2      1              2     Paul Simon
+## 3      1              3     Rob Reiner
+## 4      1              4 Candice Bergen
+## 5      1              5   Robert Klein
+## 6      1              6    Lily Tomlin
+##                                                     MusicalGuest
+## 1                                      Billy Preston &amp; Janis Ian
+## 2 Randy Newman, Phoebe Snow, Art Garfunkel &amp; Jessy Dixon Singers
+## 3                                                           none
+## 4                                                Esther Phillips
+## 5                                   ABBA &amp; Loudon Wainwright III
+## 6                  Tomlin with Howard Shore &amp; the All Nurse Band
+##      AirDate
+## 1 1975-10-11
+## 2 1975-10-18
+## 3 1975-10-25
+## 4 1975-11-08
+## 5 1975-11-15
+## 6 1975-11-22</code></pre>
+<p>Note that, as in the previous case, we omit the episodes from the most recent season.</p>
+</div>
+<div id="merging-our-data-sets" class="section level3">
+<h3>Merging our Data Sets</h3>
+<p>So we have two tables of data for what we assume is the same set of episodes. Simply bind the columns together and we’re good to go, right? Well, not so fast…</p>
+<pre class="r"><code>snl.airdates.season.counts &lt;- snl.airdates %&gt;%
+  group_by(Season) %&gt;%
+  summarize(N1=n()) %&gt;%
+  arrange(Season)
+
+snl.ratings.season.counts &lt;- snl.ratings %&gt;%
+  group_by(Season) %&gt;%
+  summarize(N2=n()) %&gt;%
+  arrange(Season)
+
+snl.airdates.season.counts %&gt;%
+  left_join(snl.ratings.season.counts, by=&quot;Season&quot;) %&gt;%
+  mutate(SameCounts = N1==N2) %&gt;%
+  filter(!SameCounts)</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   Season    N1    N2 SameCounts
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;      &lt;lgl&gt;
+## 1      2    22    23      FALSE
+## 2     10    17    18      FALSE</code></pre>
+<p>It seems the number of episodes in each seasons don’t line up exactly; there are extra episodes in the ratings dataset for Seasons 2 and 10.</p>
+<p>Typically, in a larger data setting, one would employ some kind of <a href="https://en.wikipedia.org/wiki/Fuzzy_matching_(computer-assisted_translation)">fuzzy matching</a> scheme to match the <code>Host</code> field from the airdate dataset and the <code>Guest</code> field from the ratings dataset (especially since we can’t generally guarantee that the correct order of data points has been preserved). Since the data here is not particularly large, and there appears to only be two errors, we will inspect the situation manually.</p>
+<pre class="r"><code># Seasons 2 and 10 have an extra episode in the ratings data set, let&#39;s find them!
+snl.airdates %&gt;%
+  filter(Season == 2) %&gt;%
+  .$Host</code></pre>
+<pre><code>##  [1] &quot;Lily Tomlin&quot;        &quot;Norman Lear&quot;        &quot;Eric Idle&quot;         
+##  [4] &quot;Karen Black&quot;        &quot;Steve Martin&quot;       &quot;Buck Henry&quot;        
+##  [7] &quot;Dick Cavett&quot;        &quot;Paul Simon&quot;         &quot;Jodie Foster&quot;      
+## [10] &quot;Candice Bergen&quot;     &quot;Ralph Nader&quot;        &quot;Ruth Gordon&quot;       
+## [13] &quot;Fran Tarkenton&quot;     &quot;Steve Martin&quot;       &quot;Sissy Spacek&quot;      
+## [16] &quot;Broderick Crawford&quot; &quot;Jack Burns&quot;         &quot;Julian Bond&quot;       
+## [19] &quot;Elliott Gould&quot;      &quot;Eric Idle&quot;          &quot;Shelley Duvall&quot;    
+## [22] &quot;Buck Henry&quot;</code></pre>
+<pre class="r"><code>snl.ratings %&gt;%
+  filter(Season == 2) %&gt;%
+  .$Guests </code></pre>
+<pre><code>##  [1] &quot;Lily Tomlin/James Taylor&quot;                                          
+##  [2] &quot;Norman Lear/Boz Scaggs&quot;                                            
+##  [3] &quot;Eric Idle/Joe Cocker/Stuff&quot;                                        
+##  [4] &quot;Karen Black/John Prine&quot;                                            
+##  [5] &quot;Steve Martin/Kinky Friedman&quot;                                       
+##  [6] &quot;Buck Henry/The Band&quot;                                               
+##  [7] &quot;Dick Cavett/Ry Cooder&quot;                                             
+##  [8] &quot;Paul Simon/George Harrison&quot;                                        
+##  [9] &quot;Jodie Foster/Brian Wilson&quot;                                         
+## [10] &quot;Candice Bergen/Frank Zappa&quot;                                        
+## [11] &quot;Ralph Nader/George Benson&quot;                                         
+## [12] &quot;Ruth Gordon/Chuck Berry&quot;                                           
+## [13] &quot;Fran Tarkenton/Leo Sayer, Donnie Harper and the Voices of Tomorrow&quot;
+## [14] &quot;Live from Mardi Gras&quot;                                              
+## [15] &quot;Steve Martin/The Kinks&quot;                                            
+## [16] &quot;Sissy Spacek/Richard Baskin&quot;                                       
+## [17] &quot;Broderick Crawford/Levon Helm/Dr. John/The Meters&quot;                 
+## [18] &quot;Jack Burns/Santana&quot;                                                
+## [19] &quot;Julian Bond/Tom Waits, Brick&quot;                                      
+## [20] &quot;Elliott Gould/Kate &amp; Anna McGarrigle/Roslyn Kind&quot;                  
+## [21] &quot;Eric Idle/Neil Innes&quot;                                              
+## [22] &quot;Shelley Duvall/Joan Armatrading&quot;                                   
+## [23] &quot;Buck Henry/Jennifer Warnes/Kenny Vance&quot;</code></pre>
+<p>The episode ‘Live from Mardi Gras’ appears in the ratings data but not the airdate data.</p>
+<pre class="r"><code>snl.airdates %&gt;%
+  filter(Season == 10) %&gt;%
+  .$Host</code></pre>
+<pre><code>##  [1] &quot;(none)&quot;            &quot;Bob Uecker&quot;        &quot;Jesse Jackson&quot;    
+##  [4] &quot;Michael McKean&quot;    &quot;George Carlin&quot;     &quot;Ed Asner&quot;         
+##  [7] &quot;Ed Begley, Jr.&quot;    &quot;Ringo Starr&quot;       &quot;Eddie Murphy&quot;     
+## [10] &quot;Kathleen Turner&quot;   &quot;Roy Scheider&quot;      &quot;Alex Karras&quot;      
+## [13] &quot;Harry Anderson&quot;    &quot;Pamela Sue Martin&quot; &quot;Mr. THulk Hogan&quot;  
+## [16] &quot;Christopher Reeve&quot; &quot;Howard Cosell&quot;</code></pre>
+<pre class="r"><code>snl.airdates %&gt;%
+  filter(Season == 10, SeasonEpNumber == 1) %&gt;%
+  .$MusicalGuest</code></pre>
+<pre><code>## [1] &quot;Thompson Twins&quot;</code></pre>
+<pre class="r"><code>snl.ratings %&gt;%
+  filter(Season == 10) %&gt;%
+  .$Guests </code></pre>
+<pre><code>##  [1] &quot;Thompson Twins&quot;                               
+##  [2] &quot;Bob Uecker/Peter Wolf&quot;                        
+##  [3] &quot;Jesse Jackson/Andrae Crouch, Wintley Phipps&quot;  
+##  [4] &quot;Michael McKean/Chaka Khan/The Folksmen&quot;       
+##  [5] &quot;George Carlin/Frankie Goes to Hollywood&quot;      
+##  [6] &quot;Ed Asner/The Kinks&quot;                           
+##  [7] &quot;Ed Begley Jr/Billy Squier&quot;                    
+##  [8] &quot;Ringo Starr/Herbie Hancock&quot;                   
+##  [9] &quot;Eddie Murphy/Robert Plant &amp; The Honeydrippers&quot;
+## [10] &quot;Kathleen Turner/John Waite&quot;                   
+## [11] &quot;Roy Scheider/Billy Ocean&quot;                     
+## [12] &quot;Alex Karras/Tina Turner&quot;                      
+## [13] &quot;Harry Anderson/Bryan Adams&quot;                   
+## [14] &quot;Pamela Sue Martin/Power Station&quot;              
+## [15] &quot;SNL Film Festival&quot;                            
+## [16] &quot;Mr. T and Hulk Hogan/The Commodores&quot;          
+## [17] &quot;Christopher Reeve/Santana&quot;                    
+## [18] &quot;Howard Cosell/Greg Kihn&quot;</code></pre>
+<p>The extra season 10 episode in the ratings dataset is ‘SNL Film Festival’. Note that while the host of the season premiere is listed as ‘(none)’ in the airdate dataset, the musical guest (‘Thompson Twins’) matches the <code>Guest</code> field from the ratings dataset (in some SNL episodes, the host doubles as the musical guest).</p>
+<p>We filter out these two extra episodes, and then bind the two datasets together.</p>
+<pre class="r"><code>snl.ratings &lt;- snl.ratings %&gt;%
+  filter(!(Guests %in% c(&quot;Live from Mardi Gras&quot;,&quot;SNL Film Festival&quot;)))</code></pre>
+<pre class="r"><code># Combine data frames
+snl.data &lt;- cbind(snl.airdates, snl.ratings %&gt;% select(-Season)) %&gt;%
+  select(Season,SeasonEpNumber,Guests,Host,MusicalGuest,AirDate,Rating,Votes)</code></pre>
+<p>Below are the episodes were the <code>Host</code> field string (originally from the airdate dataset) is not detected within the <code>Guest</code> field string (originally from the ratings dataset. I leave it to you to check that there are no issues other than typos (e.g. ‘Donald Pleasance’ vs. ‘Donald Pleasence’), improper capitalizations (e.g. ‘Elle MacPherson’ vs. ‘Elle Macpherson’), non-matching abbreviations (e.g. ‘Louis Gossett Jr’ vs. ‘Louis Gossett Jr.’), alternate names (e.g. ‘Tom &amp; Dick Smothers’ vs. ‘The Smothers Brothers’), spacing issues (e.g. O.J. Simpson vs. O. J. Simpson) or combined hosts/musical guests that only appear in one column and not the other. Note that I’ve truncated the strings to make them easier to display.</p>
+<pre class="r"><code># Quick sanity check, which episodes don&#39;t match hosts between data sets?
+# Does the &#39;Host&#39; from the Airdate data appear in the &#39;Guest&#39; from the Ratings data?
+snl.data %&gt;%
+  mutate(MatchDetected = str_detect(Guests,fixed(Host))) %&gt;% 
+  filter(!MatchDetected) %&gt;%
+  mutate(Guests = str_sub(Guests,0,20),
+         Host = str_sub(Host,0,20),
+         MusicalGuest = str_sub(MusicalGuest,0,20)) %&gt;%
+  select(Season,Guests,Host,MusicalGuest)</code></pre>
+<pre><code>##    Season               Guests                 Host         MusicalGuest
+## 1       3 O.J. Simpson/Ashford        O. J. Simpson  Ashford and Simpson
+## 2       5 Paul Simon, James Ta                 none Paul SimonJames Tayl
+## 3       5 Richard Benjamin, Pa Richard BenjaminPaul    The Grateful Dead
+## 4       6 Jr. Walker &amp; the All                 none Jr. Walker &amp; the All
+## 5       7          Rod Stewart               (none)          Rod Stewart
+## 6       7 Donald Pleasance/Fea     Donald Pleasence                 Fear
+## 7       8 Louis Gossett Jr/Geo   Louis Gossett, Jr. George Thorogood &amp; t
+## 8       8 Tom &amp; Dick Smothers/ The Smothers Brother       Laura Branigan
+## 9       8 Rick Moranis and Dav Rick MoranisDave Tho         The Bus Boys
+## 10      8 Beau and Jeff Bridge Beau BridgesJeff Bri         Randy Newman
+## 11      8 Robert Guilaume/Dura     Robert Guillaume          Duran Duran
+## 12      9 Danny DeVito &amp; Rhea  Danny DeVito &amp; Rhea            Eddy Grant
+## 13      9 Father Guido Sarducc Father Guido Sarducc Huey Lewis and the N
+## 14      9 Billy Crystal/Ed Koc Billy Crystal, Ed Ko             The Cars
+## 15     10       Thompson Twins               (none)       Thompson Twins
+## 16     10 Ed Begley Jr/Billy S       Ed Begley, Jr.         Billy Squier
+## 17     10 Mr. T and Hulk Hogan      Mr. THulk Hogan       The Commodores
+## 18     11 Pee Wee Herman/Queen Paul Reubens as Pee- Queen Ida &amp; the Bon 
+## 19     11 George Wendt and Fra George WendtFrancis          Philip Glass
+## 20     11 Catherine Oxenberg a Catherine OxenbergPa Paul SimonLadysmith 
+## 21     11 Anjelica Huston and  Anjelica HustonBilly George ClintonParlia
+## 22     12 Chevy Chase/Steve Ma Chevy Chase, Steve M         Randy Newman
+## 23     12 Walter Payton &amp; Joe  Joe MontanaWalter Pa        Deborah Harry
+## 24     17               Hammer            MC Hammer            MC Hammer
+## 25     17 Jason Priestly/Teena      Jason Priestley      Teenage Fanclub
+## 26     17 Roseanne &amp; Tom Arnol Roseanne ArnoldTom A Red Hot Chili Pepper
+## 27     19 Shannon Doherty/Cypr      Shannen Doherty         Cypress Hill
+## 28     19 Alec Baldwin &amp; Kim B Alec Baldwin and Kim                 UB40
+## 29     21 Elle MacPherson/Stin      Elle Macpherson                Sting
+## 30     22 Robert Downey Jr/Fio   Robert Downey, Jr.          Fiona Apple
+## 31     22 Pamela Lee/Rollins B      Pamela Anderson         Rollins Band
+## 32     23 Rudy Giuliani/Sarah      Rudolph Giuliani      Sarah McLachlan
+## 33     24 Cuba Gooding, Jr./Ri     Cuba Gooding Jr.         Ricky Martin
+## 34     25       The Rock/AC/DC The Rock (Dwayne Joh                AC/DC
+## 35     27 Ellen Degeneres/No D      Ellen DeGeneres             No Doubt
+## 36     27 The Rock/Andrew W.K.       Dwayne Johnson          Andrew W.K.
+## 37     29 Jessica Simpson and  Jessica Simpson &amp; Ni               G-Unit
+## 38     29 Mary-Kate &amp; Ashley O Mary-Kate and Ashley               J-Kwon
+## 39     40 J.K. Simmons/D&#39;Angel        J. K. Simmons             D&#39;Angelo</code></pre>
+</div>
+<div id="snl-ratings-distributions" class="section level3">
+<h3>SNL Ratings Distributions</h3>
+<p>Alright, we have our data, now let’s make some charts! First let’s take a quick look at ratings curves by season. We use the excellent <code>ggridges</code> package, by <a href="https://twitter.com/ClausWilke">Claus O. Wilke</a> (available from <a href="https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html">CRAN</a>), to display the large number of density curves (note that you may have heard of this package by <a href="http://serialmentor.com/blog/2017/9/15/goodbye-joyplots">another name</a>). I also use the <code>viridis</code> package to display the median episode rating for each season by a user-friendly color.</p>
+<pre class="r"><code># Extract median episode rating for each season
+median.ratings &lt;- snl.data %&gt;% 
+  group_by(Season) %&gt;% 
+  summarize(MedianRating = median(Rating))
+
+# Merge medians to SNL data
+snl.data &lt;- snl.data %&gt;%
+  left_join(median.ratings, by=&quot;Season&quot;)
+
+# Plot rating densities
+ggplot(data=snl.data, aes(x=Rating, y=as.factor(Season), fill=MedianRating)) +
+  geom_density_ridges(alpha=0.7, rel_min_height=0.01) +
+  scale_fill_viridis(name = &quot;Median Rating&quot;) +
+  scale_y_discrete(position=&quot;right&quot;) +
+  theme_bw(16) +
+  xlim(0,10) +
+  xlab(&quot;Rating&quot;) +
+  ylab(&quot;Season&quot;) +
+  annotate(&quot;text&quot;,x=5,y=20,col=&quot;red&quot;,label=&quot;@mathieubray 2017&quot;,
+           alpha=0.15,cex=15,fontface=&quot;bold&quot;,angle=30) +
+  ggtitle(&quot;SNL Ratings Density by Season&quot;, subtitle = &quot;Color represents median episode rating from the given season. Data from imdb.com&quot;)</code></pre>
+<p><img src="/post/SNL-Charts_files/figure-html/snl_1-1.png" width="960" /></p>
+<p>This chart gives a nice snapshot of viewer’s impressions of SNL over the years, with strong early seasons followed by a comparatively mediocre stretch from Seasons 9-16 (corresponding to 1983-1990), and another slightly worse stretch around Season 22 to Season 30 (1996-2004). While recent seasons appear to be more favorably rated in general, there does not seem to be much evidence to suggest any major SNL renaissance (which one would assume if we look at the number of <a href="http://variety.com/2017/tv/news/saturday-night-live-emmy-wins-kate-mckinnon-alec-baldwin-1202557463/">Emmys</a> earned last season).</p>
+<p>Check out that rough patch in Season 41 where the density perks up far to the left of the main ratings curve. Tough to tell what may have caused that…</p>
+<pre class="r"><code>snl.data %&gt;% 
+  filter(Season==41, Rating &lt; 4.0) %&gt;%
+  select(Season, SeasonEpNumber, Host, AirDate, Rating, Votes)# One of the least popular episodes</code></pre>
+<pre><code>##   Season SeasonEpNumber         Host    AirDate Rating Votes
+## 1     41              4 Donald Trump 2015-11-07    3.7   492</code></pre>
+<p>I’ll reiterate here that the IMDb ratings are reported as the average of ratings on a 0-10 scale. I should note that the number of votes tend to be high for recent episodes as well as early episodes, while episodes from most of the other seasons have comparatively much fewer votes.</p>
+<pre class="r"><code>mean.votes &lt;- snl.data %&gt;% 
+  group_by(Season) %&gt;% 
+  summarize(MeanVotes = mean(Votes))
+
+snl.data &lt;- snl.data %&gt;%
+  left_join(mean.votes, by=&quot;Season&quot;)
+
+ggplot(data=snl.data, aes(x=as.factor(Season), y=Votes, color = MeanVotes)) +
+  scale_color_viridis(name = &quot;Mean Number of Votes&quot;, direction=-1) +
+  geom_boxplot(size=0.75) +
+  xlab(&quot;Season&quot;) +
+  theme_bw(16) +
+  coord_flip() +
+  annotate(&quot;text&quot;,x=21,y=250,col=&quot;red&quot;,label=&quot;@mathieubray 2017&quot;,
+           alpha=0.15,cex=12,fontface=&quot;bold&quot;,angle=30) +
+  ggtitle(&quot;Number of Votes for SNL Rating is Not Consistent Season to Season&quot;,
+          subtitle=&quot;Color represents mean number of votes by season. Data from imdb.com&quot; )</code></pre>
+<p><img src="/post/SNL-Charts_files/figure-html/snl_2-1.png" width="960" /></p>
+<p>The overall distribution of ratings is shown below, as both a histogram (recall that ratings are collected rounded to 1 decimal place, effectively discretizing the data), as well as a density curve.</p>
+<pre class="r"><code>ggplot(data=snl.data, aes(Rating)) +
+  geom_histogram(stat=&quot;count&quot;,alpha=0.8,fill=&quot;blue&quot;) +
+  theme_bw(16) +
+  xlim(0,10) +
+  ylim(0,50) +
+  xlab(&quot;Rating&quot;) +
+  ylab(&quot;Number of Episodes&quot;) +
+  annotate(&quot;text&quot;,x=5,y=25,col=&quot;red&quot;,label=&quot;@mathieubray 2017&quot;,
+           alpha=0.15,cex=15,fontface=&quot;bold&quot;,angle=30) +
+  ggtitle(&quot;SNL Ratings Histogram&quot;,
+          subtitle=&quot;Data from imdb.com&quot; )</code></pre>
+<p><img src="/post/SNL-Charts_files/figure-html/snl_3-1.png" width="960" /></p>
+<pre class="r"><code>ggplot(data=snl.data, aes(x=Rating)) +
+  geom_density(alpha=0.5, fill=&quot;blue&quot;) +
+  theme_bw(16) +
+  xlim(0,10) +
+  xlab(&quot;Rating&quot;) +
+  ylab(&quot;Density&quot;) +
+  annotate(&quot;text&quot;,x=5,y=0.25,col=&quot;red&quot;,label=&quot;@mathieubray 2017&quot;,
+           alpha=0.15,cex=15,fontface=&quot;bold&quot;,angle=30) +
+  ggtitle(&quot;SNL Ratings Density&quot;,
+          subtitle=&quot;Data from imdb.com&quot; )</code></pre>
+<p><img src="/post/SNL-Charts_files/figure-html/snl_4-1.png" width="960" /></p>
+<p>We observe a bimodal density curve with most episodes earning ratings around 6.0 (‘mediocre’ episodes), or around 7.5 (‘good-great’ episodes). We continue to use densities going forward, mostly based on their elegance and ease of qualitative interpretation.</p>
+</div>
+<div id="snl-ratings-based-on-number-of-weeks-between-episodes" class="section level3">
+<h3>SNL Ratings Based on Number of Weeks Between Episodes</h3>
+<p>We are interested in observing whether some kind of ‘writer fatigue’ may affect the quality of SNL episodes. First, we will calculate for each episode the number of weeks since the previous episode, a.k.a. the break betwen each episode. This can be achieved using the <code>lag</code> function (to collect in a separate variable the airdate of the episode previous to each episode), and the <code>as.period</code> function from the <code>lubridate</code> package, to extract the difference in days between two airdates, which we then convert to a number of weeks. A snippet of the data with the new column is shown below.</p>
+<pre class="r"><code>### Ratings based on number of weeks since last episode
+
+# Add in the number of weeks since the last episode
+snl.data.enhanced &lt;- snl.data %&gt;%
+  mutate(PreviousAirDate = lag(AirDate), # Get airdate of previous episode
+         WeeksSinceLastEpisode = as.period(AirDate - PreviousAirDate)@day / 7) %&gt;% # Calculate number of weeks since last episode
+  select(-PreviousAirDate)</code></pre>
+<pre class="r"><code>snl.data.enhanced %&gt;% 
+  filter(Season==42) %&gt;%
+  select(SeasonEpNumber,Host,AirDate,WeeksSinceLastEpisode) %&gt;%
+  head(10)</code></pre>
+<pre><code>##    SeasonEpNumber                 Host    AirDate WeeksSinceLastEpisode
+## 1               1        Margot Robbie 2016-10-01                    19
+## 2               2   Lin-Manuel Miranda 2016-10-08                     1
+## 3               3          Emily Blunt 2016-10-15                     1
+## 4               4            Tom Hanks 2016-10-22                     1
+## 5               5 Benedict Cumberbatch 2016-11-05                     2
+## 6               6       Dave Chappelle 2016-11-12                     1
+## 7               7         Kristen Wiig 2016-11-19                     1
+## 8               8           Emma Stone 2016-12-03                     2
+## 9               9            John Cena 2016-12-10                     1
+## 10             10        Casey Affleck 2016-12-17                     1</code></pre>
+<p>Note that the season premiere will always have a large break (SNL does not air over the summer). Let’s look at the distribution of break lengths.</p>
+<pre class="r"><code># Standardize these weeks into categories
+snl.data.enhanced %&gt;%
+  group_by(WeeksSinceLastEpisode) %&gt;%
+  count</code></pre>
+<pre><code>## # A tibble: 18 x 2
+## # Groups:   WeeksSinceLastEpisode [18]
+##    WeeksSinceLastEpisode     n
+##                    &lt;dbl&gt; &lt;int&gt;
+##  1                     1   481
+##  2                     2   132
+##  3                     3   117
+##  4                     4    41
+##  5                     5    10
+##  6                     6     4
+##  7                     7     1
+##  8                     8     1
+##  9                    16     1
+## 10                    17     2
+## 11                    18     3
+## 12                    19    17
+## 13                    20    11
+## 14                    21     3
+## 15                    25     2
+## 16                    30     1
+## 17                    32     1
+## 18                    NA     1</code></pre>
+<p>(The <code>NA</code> above is due to the first episode not having a previous episode from which to calculate the number of weeks since the last episode). We discretize our variable, using the <code>case_when</code> function from the <code>dplyr</code> package (which I first learned from <a href="http://www.brodrigues.co/blog/2017-02-17-lesser_known_tricks/">here</a>, along with some other neat <code>dplyr</code> tricks), designating any break longer than 4 weeks as <code>4+</code> to balance the categories.</p>
+<pre class="r"><code>snl.data.enhanced &lt;- snl.data.enhanced %&gt;%
+  mutate(WeeksCat = case_when(.$WeeksSinceLastEpisode &gt;= 4 ~ &quot;4+&quot;,
+                            is.na(WeeksSinceLastEpisode) ~ &quot;4+&quot;,
+                            TRUE ~ as.character(WeeksSinceLastEpisode))) # Truncate at 4+ weeks break
+  
+snl.data.enhanced %&gt;%
+  group_by(WeeksCat) %&gt;%
+  count</code></pre>
+<pre><code>## # A tibble: 4 x 2
+## # Groups:   WeeksCat [4]
+##   WeeksCat     n
+##      &lt;chr&gt; &lt;int&gt;
+## 1        1   481
+## 2        2   132
+## 3        3   117
+## 4       4+    99</code></pre>
+<p>The ratings densities for each group of break lengths are shown below, with the overall rating density in the background in grey.</p>
+<pre class="r"><code># Plot distributions based on number of weeks between episodes
+ggplot(data=snl.data.enhanced, aes(x=Rating, fill=WeeksCat)) +
+  geom_density(data = snl.data.enhanced %&gt;% select(-WeeksCat), fill = &quot;darkgrey&quot;) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~WeeksCat) +
+  scale_fill_viridis(name=&quot;Weeks Since Last Episode&quot;,discrete=T) +
+  theme_bw(16) +
+  xlim(0,10) +
+  ylim(0,0.62) +
+  xlab(&quot;Rating&quot;) +
+  ylab(&quot;Density&quot;) +
+  annotate(&quot;text&quot;,x=5,y=0.31,col=&quot;red&quot;,label=&quot;@mathieubray 2017&quot;,
+           alpha=0.15,cex=6,fontface=&quot;bold&quot;,angle=30) +
+  ggtitle(&quot;Does the Break Before an SNL Episode Affect its Rating?&quot;,
+          subtitle=&quot;Grey curves represent overall ratings density. Data from imdb.com&quot; )</code></pre>
+<p><img src="/post/SNL-Charts_files/figure-html/snl_5-1.png" width="960" /></p>
+<p>Some takeaways from this set of charts:</p>
+<ul>
+<li>The ‘good-great’ mode is lower for episodes with no break (equivalently, 1 week since last episode)</li>
+<li>Episodes with a week break prior (equivalently, 2 weeks since last episode) see a more even distribution of episode ratings</li>
+<li>For episodes with long breaks prior to air, the distribution skews much higher toward ‘good-great’</li>
+</ul>
+<p>This seems to lend evidence to support the fatigue hypothesis, though there are a few other factors we should probably keep in mind. Let’s look at episodes written with at least a week break versus those without.</p>
+<pre class="r"><code>snl.data.enhanced &lt;- snl.data.enhanced %&gt;%
+  mutate(FreshEpisode = WeeksCat != &quot;1&quot;) # Mark whether the episode is &#39;fresh&#39; (at least 1 week break between episodes)
+
+snl.data.enhanced %&gt;%
+  group_by(FreshEpisode) %&gt;%
+  count</code></pre>
+<pre><code>## # A tibble: 2 x 2
+## # Groups:   FreshEpisode [2]
+##   FreshEpisode     n
+##          &lt;lgl&gt; &lt;int&gt;
+## 1        FALSE   481
+## 2         TRUE   348</code></pre>
+<pre class="r"><code>ggplot(data=snl.data.enhanced, aes(x=Rating, fill=FreshEpisode)) +
+  geom_density(alpha=0.5) +
+  scale_fill_viridis(discrete=T, name = &quot;&quot;, labels=c(&quot;No Break&quot;,&quot;Break&quot;)) +
+  theme_bw(16) +
+  xlim(0,10) +
+  ylim(0,0.5) +
+  xlab(&quot;Rating&quot;) +
+  ylab(&quot;Density&quot;) +
+  annotate(&quot;text&quot;,x=5,y=0.25,col=&quot;red&quot;,label=&quot;@mathieubray 2017&quot;,
+           alpha=0.15,cex=15,fontface=&quot;bold&quot;,angle=30) +
+  ggtitle(&quot;Are Ratings Affected by Whether an Episode Airs After a Break?&quot;,
+          subtitle=&quot;Color represents whether episodes are the first of their seasons (&#39;Premiere&#39;) or not (&#39;Not Premiere&#39;).\nData from imdb.com&quot; )</code></pre>
+<p><img src="/post/SNL-Charts_files/figure-html/snl_6-1.png" width="960" /></p>
+<p>The ‘No Break’ curve is equivalent to the top-left graph from the previous chart. We once again observe a bimodal distribution for episodes that aired with a break, though with fewer ‘medicore’ episodes and more ‘good-great’ episodes. It is interesting that we also observe a small third cluster of very poorly rated episodes among episodes that aired with a break.</p>
+<p>Most of the episodes with at least 4 weeks of break are season premieres, ostensibly with a full summer of ideas fresh in the writers’ minds. Let’s look at the distribution of ratings for season premieres versus non-season premieres.</p>
+<pre class="r"><code>snl.data.enhanced &lt;- snl.data.enhanced %&gt;%
+  mutate(Premiere = SeasonEpNumber == 1)
+
+snl.data.enhanced %&gt;%
+  group_by(Premiere) %&gt;%
+  count</code></pre>
+<pre><code>## # A tibble: 2 x 2
+## # Groups:   Premiere [2]
+##   Premiere     n
+##      &lt;lgl&gt; &lt;int&gt;
+## 1    FALSE   787
+## 2     TRUE    42</code></pre>
+<p>With the obvious caveat that there are only 42 season premieres with which to draw the density, the two curves are shown below.</p>
+<pre class="r"><code>ggplot(data=snl.data.enhanced, aes(x=Rating, fill=Premiere)) +
+  geom_density(position=&quot;identity&quot;,alpha=0.5) +
+  scale_fill_viridis(discrete=T, name = &quot;&quot;, labels=c(&quot;Not Premiere&quot;,&quot;Premiere&quot;)) +
+  theme_bw(16) +
+  xlim(0,10) +
+  ylim(0,0.5) +
+  xlab(&quot;Rating&quot;) +
+  ylab(&quot;Density&quot;) +
+  annotate(&quot;text&quot;,x=5,y=0.25,col=&quot;red&quot;,label=&quot;@mathieubray 2017&quot;,
+           alpha=0.15,cex=15,fontface=&quot;bold&quot;,angle=30) +
+  ggtitle(&quot;Are Ratings Affected by Whether an Episode is a Season Premiere?&quot;,
+          subtitle=&quot;Color represents whether episodes are the first of their seasons (&#39;Premiere&#39;) or not (&#39;Not Premiere&#39;).\nData from imdb.com&quot; )</code></pre>
+<p><img src="/post/SNL-Charts_files/figure-html/snl_7-1.png" width="960" /></p>
+<p>Season premieres appear in general to be very highly rated compared to other episodes.</p>
+</div>
+<div id="snl-ratings-based-on-consecutive-episode-sequences" class="section level3">
+<h3>SNL Ratings Based on Consecutive Episode Sequences</h3>
+<p>Similar the length of the break prior to each episode, we can also look at the sequence of consecutive episodes and how that affects episode ratings. Episodes that air at the end of a sequence of consecutive episodes may well suffer in quality compared to those at the beginning of the sequence (i.e. those that aired after at least a week break).</p>
+<p>The code to determine the placement of each episode within a sequence of consecutive episodes is included below. I used a ‘for’ loop here (gasp!), since I couldn’t quite figure out how to do this effectively in a more R-friendly way. If anyone has any suggestions, shoot me a line in the comments or on the <a href="https://twitter.com/mathieubray">Twitters</a>.</p>
+<pre class="r"><code>num.episodes &lt;- length(snl.data.enhanced$FreshEpisode)
+
+consecutive.weeks &lt;- numeric(num.episodes)
+counter &lt;- 1
+
+for (i in 1:num.episodes){
+  
+  if (snl.data.enhanced$FreshEpisode[i]){ # If the episode is fresh
+    counter &lt;- 1 # Reset counter
+  } else {
+    consecutive.weeks[i] &lt;- counter # For episode i, counter = number of episodes in consecutive weeks
+    counter &lt;- counter + 1 # Augment counter
+  }
+}
+
+snl.data.enhanced$ConsecutiveWeeks &lt;- consecutive.weeks
+
+snl.data.enhanced %&gt;% 
+  filter(Season==42) %&gt;%
+  select(SeasonEpNumber,Host,AirDate,ConsecutiveWeeks) %&gt;%
+  head(10)</code></pre>
+<pre><code>##    SeasonEpNumber                 Host    AirDate ConsecutiveWeeks
+## 1               1        Margot Robbie 2016-10-01                0
+## 2               2   Lin-Manuel Miranda 2016-10-08                1
+## 3               3          Emily Blunt 2016-10-15                2
+## 4               4            Tom Hanks 2016-10-22                3
+## 5               5 Benedict Cumberbatch 2016-11-05                0
+## 6               6       Dave Chappelle 2016-11-12                1
+## 7               7         Kristen Wiig 2016-11-19                2
+## 8               8           Emma Stone 2016-12-03                0
+## 9               9            John Cena 2016-12-10                1
+## 10             10        Casey Affleck 2016-12-17                2</code></pre>
+<p>We do a quick check of the counts of the number of episodes aired consecutively prior to each episode.</p>
+<pre class="r"><code>snl.data.enhanced %&gt;%
+  group_by(ConsecutiveWeeks) %&gt;%
+  count</code></pre>
+<pre><code>## # A tibble: 4 x 2
+## # Groups:   ConsecutiveWeeks [4]
+##   ConsecutiveWeeks     n
+##              &lt;dbl&gt; &lt;int&gt;
+## 1                0   348
+## 2                1   332
+## 3                2   142
+## 4                3     7</code></pre>
+<p>The longest string of episodes airing on consecutive weeks is 4 (i.e. episodes with 3 consecutive episodes prior), and there are only 7 such instances. We thus categorize the variable and include any episode with 3 consecutive episodes prior into the ‘2-3’ category. Densities are plotted below.</p>
+<pre class="r"><code>snl.data.enhanced &lt;- snl.data.enhanced %&gt;%
+  mutate(ConsecutiveCat = case_when(.$ConsecutiveWeeks &gt;= 2 ~ &quot;2-3&quot;,
+                          is.na(ConsecutiveWeeks) ~ &quot;2-3&quot;,
+                          TRUE ~ as.character(ConsecutiveWeeks)))</code></pre>
+<pre class="r"><code>ggplot(data=snl.data.enhanced, aes(x=Rating, fill=ConsecutiveCat)) +
+  geom_density(data = snl.data.enhanced %&gt;% select(-ConsecutiveCat), fill = &quot;darkgrey&quot;) +
+  geom_density(alpha=0.7) +
+  facet_wrap(~ConsecutiveCat) +
+  scale_fill_viridis(name = &quot;Number of Consecutive Episodes Prior&quot;, discrete=T) +
+  theme_bw(16) +
+  xlim(0,10) +
+  xlab(&quot;Rating&quot;) +
+  ylab(&quot;Density&quot;) +
+  annotate(&quot;text&quot;,x=5,y=0.31,col=&quot;red&quot;,label=&quot;@mathieubray 2017&quot;,
+           alpha=0.15,cex=6,fontface=&quot;bold&quot;,angle=30) +
+  theme(legend.position = &quot;bottom&quot;) +
+  ggtitle(&quot;Do Long Sequences of Episodes Affect Ratings?&quot;,
+          subtitle=&quot;Grey curves represent overall ratings density. Data from imdb.com&quot; )</code></pre>
+<p><img src="/post/SNL-Charts_files/figure-html/snl_8-1.png" width="960" /></p>
+<p>The leftmost panel is equivalent to the ‘Break’ curve shown previously. Episodes that aired as the second in a sequence of episodes (middle panel) see slightly more ‘mediocre’ episodes and slightly fewer ‘good-great’ episodes. The rightmost panel, which include episodes airing at the end of a long sequence of episodes, appears to be more spread out, with dips in both of the main modes. While interesting, there may be more at play here. For example, it may make a difference if, for example, the episode is the second in a long sequence of consecutive episodes versus the second episode in a sequence of two consecutive episodes. Perhaps a question for another day…</p>
+<p>That’s about as much effort as I’m willing to put into this right now. As I said, not super deep, though I have a few ideas on how one can augment this data for some possible additional insights. Anyway, that’s it for now. Tune in for more fun stuff from me, and Live… from Ann Arbor… it’s Saturday Night! (spent staying in and procrastinating on actual work by writing this instead!)</p>
+</div>
+</div>
+    <div class="post__footer">
+      
+        <span><a class="category" href="/categories/r/">R</a></span>
+
+
+      
+
+      
+        <span><a class="tag" href="/tags/r/">R</a><a class="tag" href="/tags/imdb/">IMDb</a></span>
+
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Mathieu Bray
+        2024
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script><script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

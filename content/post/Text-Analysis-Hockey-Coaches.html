@@ -1,0 +1,400 @@
+---
+title: "Text Analysis of NHL Hockey Coach Interviews"
+author: "Mathieu Bray"
+date: 2017-02-11
+categories: ["R"]
+tags: ["R", "hockey", "tidytext"]
+slug: "Text-Analysis-Hockey-Coaches"
+---
+
+
+
+<p><em>Code for this analysis is availabile on <a href="https://github.com/mathieubray/Hockey/tree/master/CoachTranscripts">Github</a></em></p>
+<p>In the <a href="https://en.wikipedia.org/wiki/2016_Stanley_Cup_playoffs">2016 NHL playoffs</a>, the Eastern Conference champion <a href="https://www.nhl.com/penguins">Pittsburgh Penguins</a>, coached by Mike Sullivan, defeated the Western Conference champion <a href="https://www.nhl.com/sharks">San Jose Sharks</a>, coached by Peter DeBoer, in a best of seven series to win the fourth Stanley Cup in their franchise’s history. In a series like this, with many ups and downs for both teams, the coach, serving as a spokesman for his team to the media, is under especially high pressure. Can this pressure be gleaned through a text analysis on their words in pre- and post-game interviews? Are there differences between the two coaches in terms of how they relay their mindset to the public? In my eternal attempt to shoehorn hockey concepts into data science problems, I will spend some time here showing how to apply some basic text analysis techniques to a set of NHL coach pre- and post-game press interviews scraped from the web.</p>
+<p>Analysis of textual data has been growing in interest in data science circles. While the techniques I will demonstrate here can’t really be described as rigorous from a statistical standpoint, and will really only scratch the surface as far as answering the questions I posed, hopefully this will provide a nice introduction to a growing and interesting area of data science, and can serve as a jumping-off point for some more in-depth analysis. I will also illustrate some of the numerous pitfalls that can occur in even a simple text-based analysis.</p>
+<p>This post was largely inspired by the works of <a href="https://twitter.com/drob">David Robinson</a> and <a href="https://twitter.com/juliasilge">Julia Silge</a>, in particular their book on <a href="http://tidytextmining.com/">Text Mining with R</a>, as well as Robinson’s <a href="http://varianceexplained.org/r/trump-tweets/">analysis of Trump tweets</a>. I will make extensive use of their <code>tidytext</code> package, available from <a href="https://cran.r-project.org/web/packages/tidytext/index.html">CRAN</a>. I will also demonstrate some more involved web scraping to collect the data.</p>
+<p>Before we get going, let’s start as always by loading some handy libraries.</p>
+<pre class="r"><code>library(rvest) # For web scraping
+library(plyr) # &#39;rbind.fill&#39; 
+library(dplyr)
+library(tidyr) # &#39;spread&#39;
+library(purrr) # &#39;map&#39;
+library(stringr) # String functions
+library(lubridate) # For working with dates
+library(tidytext) # Text analysis
+library(ggplot2) # Plots
+library(wordcloud) # Word clouds</code></pre>
+<div id="collecting-data---the-2016-stanley-cup-final" class="section level3">
+<h3>Collecting Data - The 2016 Stanley Cup Final</h3>
+<p>The 2016 Stanley Cup Final series took place between May 30 and June 12 of 2016. The Penguins won Games 1 and 2, the latter in overtime, to take a 2-1 series lead. The Sharks and Penguins then alternated wins, with the Penguins taking Game 6 to clinch the Stanley Cup (all info from <a href="http://www.hockey-reference.com/leagues/NHL_2016_games.html">Hockey Reference</a>).</p>
+<p>We will scrape the pre- and post-game interview transcripts from <a href="http://www.asapsports.com/">ASAP Sports</a>, which hosts a collection of transcripts from various sporting events. The remainder of this section, describing the scraper used to collect the transcript texts, is admittedly a little code heavy (though I still might expand on it further in a separate post). For those who want the data handy to play along without scraping, you can <a href="https://github.com/mathieubray/mathieubray.github.io/blob/master/data/2015-2016_SCFinal_Transcripts.csv">download</a> the data directly from my Github. If you want to skip directly to the text analysis, click <a href="#basic-text-analysis">here</a>.</p>
+<p>Navigating to the <a href="http://www.asapsports.com/show_events.php?category=5&amp;year=2016&amp;title=NHL+STANLEY+CUP+FINAL%3A+SHARKS+v+PENGUINS">2016 Stanley Cup Final page</a>, we see a collection of links for each day of the series. Each of these links leads to a set of additional links, which each contain an interview with a player, coach or other important figure.</p>
+<pre class="r"><code>get.transcripts &lt;- function(url){
+  
+  urls &lt;- read_html(url) %&gt;% 
+    html_nodes(&quot;a&quot;) %&gt;%
+    html_attr(&quot;href&quot;) # Extract the url attributes
+  
+  # Relevant links have the &#39;show_interview.php?&#39; tag
+  relevant.urls &lt;- urls[grepl(urls,pattern=&quot;show_interview.php?&quot;,fixed=T)] 
+  
+  # Run text extraction function on each link
+  transcripts &lt;- rbind.fill(map(relevant.urls,extract.interview.text))
+  
+  return(transcripts)
+}
+
+
+extract.interview.text &lt;- function(url){
+  
+  text &lt;- read_html(url) %&gt;%
+    html_nodes(&quot;td&quot;) %&gt;% 
+    html_text() # Extract text
+  
+  # Relevant text 
+  text.clean &lt;- text[grepl(text,pattern=&quot;FastScripts Transcript by ASAP Sports&quot;,fixed=T)]
+  
+  # Split information into separate strings, remove whitespace at the beginning and end of each
+  text.clean.split &lt;- str_trim(str_split(text.clean,pattern=&quot;\n&quot;)[[2]])
+  
+  # Remove empty strings, remove the ASAP sports tag from strings
+  raw.text &lt;- gsub(text.clean.split[text.clean.split != &quot;&quot;],pattern=&quot; FastScripts Transcript by ASAP Sports&quot;,replacement=&quot;&quot;)
+  
+  # Extract date (in second string)
+  date &lt;- mdy(raw.text[2])
+  
+  # Third string contains the interview subject, though everything is squashed together
+  # Put spaces between capital letters, split based on whitespace, then combine the second and fourth token as the subject
+  tokens &lt;- unlist(strsplit(gsub(&#39;([[:upper:]])&#39;,&#39; \\1&#39;,raw.text[3]),&quot;[[:space:]]&quot;))
+  subject &lt;- paste(tokens[2],tokens[4])
+  
+  # Find index of the string where the interview starts, which is the first string where &#39;Q.&#39; and &#39;MODERATOR&#39; serves as a prompt
+  # For interviews taking place after games, there is additional text in the preamble. Therefore, if this index is large, we can infer this is a post-game interview 
+  interview.starts &lt;- min(c(which(str_detect(raw.text,&quot;Q.&quot;)),which(str_detect(raw.text,&quot;MODERATOR&quot;))))
+  after.game &lt;- interview.starts &gt; 4
+  
+  # Actual text is from the above found index onward
+  interview.text &lt;- raw.text[interview.starts:length(raw.text)]
+  
+  # Remove general prompts
+  relevant.interview.text &lt;- paste(interview.text[!str_detect(interview.text,&quot;Q.&quot;) &amp; !str_detect(interview.text,&quot;MODERATOR&quot;)],collapse=&quot; &quot;)
+  
+  # Combine information into data frame
+  interview.data &lt;- data.frame(Date=date,Subject=subject,AfterGame=after.game,Text=relevant.interview.text,stringsAsFactors=F)
+  
+  return(interview.data)
+  
+}</code></pre>
+<p>The scraper makes use of the <code>read_html</code> function from Hadley Wickham’s <code>rvest</code> package to extract the html from the desired web pages. We then parse the html based on the relevant css selector using <code>html_nodes</code>. For example, the relevant parts of the page containing interview links will begin with <code>&lt;a href=...&gt;</code>. Finally, we extract our desired information using either the <code>html_attrs</code> or <code>html_text</code> functions. See the comments in the above code, or the <a href="https://github.com/hadley/rvest">documentation</a> for some more information.</p>
+<p>We first extract all the links from the main web page. The links we are interested in are those for the individual games, which can be identified with the <code>show_event.php?</code> tag. We run the <code>get.transcripts</code> function on each of these links. This function will load the page, then collect the links representing each of the interviews (in this case, they can be identified by the <code>show_interview.php?</code> tag). Then the <code>extract.interview.text</code> function is run on each of these links, which loads the page, extracts the text, and collects some other relevant information, such as the date and the subject of the interview. Again, the comments in the above code provide some clarification.</p>
+<pre class="r"><code>cup.final.url &lt;- paste0(&quot;http://www.asapsports.com/show_events.php?category=5&amp;year=2016&amp;title=NHL+STANLEY+CUP+FINAL%3A+SHARKS+v+PENGUINS&quot;)
+
+# Extract links
+transcript.urls &lt;- read_html(cup.final.url) %&gt;%
+  html_nodes(&quot;a&quot;) %&gt;%
+  html_attr(&quot;href&quot;)
+
+# Relevant links have the &#39;show_event.php?&#39; tag
+relevant.transcript.urls &lt;- transcript.urls[grepl(transcript.urls,pattern=&quot;show_event.php?&quot;,fixed=T)]
+
+# Run function on links
+transcripts &lt;- rbind.fill(map(relevant.transcript.urls,get.transcripts)) %&gt;%
+  mutate(Subject = gsub(Subject,pattern=&quot;Peter De&quot;,replacement=&quot;Peter DeBoer&quot;))</code></pre>
+</div>
+<div id="basic-text-analysis" class="section level3">
+<h3>Basic Text Analysis</h3>
+<p>Let’s get a general sense of our data. First, our text requires a few more steps of cleaning before being ready for analysis. Since our scraper collected all of the interviews available over the course of the Cup Final, we filter out all the non-coach interviews, so that our sujects are only ‘Mike Sullivan’ or ‘Peter DeBoer’. We remove the prompts from the text, and create a single label with the date and whether the interview took place after a game or not; this label will be useful later. Then, using the <code>unnest_tokens</code> function from the <code>tidytext</code> package, we extract each word from the text onto its own row in a new data frame, then filter out all the ‘stop words’ (common words that don’t provide any meaningful information, such as prepositions and conjunctions). The list of stop words is available through the <code>stop_words</code> data frame from the <code>tidytext</code> package.</p>
+<pre class="r"><code># Focus on interviews with either coach Mike Sullivan or Peter DeBoer, remove prompts from text,
+# and add label to interview
+
+label.function &lt;- function(Date,AfterGame){
+  return(ifelse(AfterGame,paste(Date,&quot;Post-Game&quot;),Date))
+}
+
+coaches.text &lt;- transcript %&gt;% 
+  filter(Subject %in% c(&quot;Mike Sullivan&quot;,&quot;Peter DeBoer&quot;)) %&gt;%
+  mutate(Text = gsub(Text,pattern=&quot;COACH SULLIVAN: &quot;,replacement=&quot;&quot;)) %&gt;%
+  mutate(Text = gsub(Text,pattern=&quot;COACH DeBOER: &quot;,replacement=&quot;&quot;)) %&gt;%
+  rowwise() %&gt;%
+  mutate(Label = label.function(Date,AfterGame)) %&gt;%
+  ungroup()
+  
+
+# Split text into words, filter out &#39;stop words&#39;
+coaches.words &lt;- coaches.text %&gt;%
+  unnest_tokens(Word,Text) %&gt;%
+  filter(! Word %in% stop_words$word)
+
+head(coaches.words,n=12)</code></pre>
+<pre><code>## # A tibble: 12 x 5
+##          Date       Subject AfterGame                Label       Word
+##         &lt;chr&gt;         &lt;chr&gt;     &lt;lgl&gt;                &lt;chr&gt;      &lt;chr&gt;
+##  1 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game      learn
+##  2 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game        lot
+##  3 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game      learn
+##  4 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game        lot
+##  5 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game    process
+##  6 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game     people
+##  7 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game   business
+##  8 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game   coaching
+##  9 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game    players
+## 10 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game management
+## 11 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game   scouting
+## 12 2016-06-12 Mike Sullivan      TRUE 2016-06-12 Post-Game     people</code></pre>
+<p>Let’s make a simple display of the 20 most common words used by each coach and their frequency. We can also make word clouds to display the most common words used by each coach. Note that legends are omitted in some of the plots going forward. Gold coloring refers to Mike Sullivan of the Pittsburgh Penguins, while teal refers to Peter DeBoer of the San Jose Sharks.</p>
+<pre class="r"><code>## Most Common Words
+
+# Count individual occurrences of each word
+coaches.word.count &lt;- coaches.words %&gt;%
+  count(Word,Subject) %&gt;%
+  ungroup() %&gt;%
+  group_by(Subject) %&gt;%
+  top_n(20) %&gt;%
+  rename(Occurrences = n)
+
+# Set team colors
+team.colors &lt;- c(&quot;#c5b358&quot;,&quot;#007889&quot;) # Pittsburgh Gold and San Jose Teal respectively
+  
+# Plots of 20 most common words by coach
+ggplot(data=coaches.word.count,aes(x=Word,y=Occurrences,fill=Subject)) +
+  facet_wrap(~Subject, scales=&quot;free_y&quot;) +
+  geom_bar(stat=&quot;identity&quot;,show.legend=F) +
+  scale_fill_manual(values=team.colors) +
+  xlab(&quot;Word&quot;) +
+  coord_flip() +
+  theme_bw(15)</code></pre>
+<p><img src="/post/Text-Analysis-Hockey-Coaches_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code># Word clouds for each coach
+coaches.words %&gt;%
+  filter(Subject == &quot;Mike Sullivan&quot;) %&gt;%
+  count(Word) %&gt;%
+  with(wordcloud(Word,n,max.words=100,colors=team.colors[1]))</code></pre>
+<p><img src="/post/Text-Analysis-Hockey-Coaches_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<pre class="r"><code>coaches.words %&gt;%
+  filter(Subject == &quot;Peter DeBoer&quot;) %&gt;%
+  count(Word) %&gt;%
+  with(wordcloud(Word,n,max.words=100,colors=team.colors[2]))</code></pre>
+<p><img src="/post/Text-Analysis-Hockey-Coaches_files/figure-html/unnamed-chunk-6-3.png" width="672" /></p>
+<p>These words are more or less what you would expect a hockey coach to be saying in an interview. The most frequent word used by each coach is ‘game’, and they both use several derivatives of the word ‘play’. There are also plenty of references to hockey-specific subjects, such as ‘puck’ and ‘net’. All in all, no real surprises (or insight) here.</p>
+<p>Let’s see if we can find any differences between the speaking patterns of these two coaches. This first technique is the same used by David Robinson in his <a href="http://varianceexplained.org/r/trump-tweets/">Trump</a> post. For each word, we compare the frequency of use by Sullivan to that of DeBoer by taking the natural log of their ratio. High positive values refer to words used more frequently by Sullivan, while negative values refer to words used more frequently by DeBoer.</p>
+<pre class="r"><code>## Most Different Words
+
+coach.ratios &lt;- coaches.words %&gt;%
+  count(Word,Subject) %&gt;%
+  rename(Occurrences = n) %&gt;%
+  filter(sum(Occurrences) &gt; 5) %&gt;% # Focus on words appearing at least 5 times in the text
+  spread(Subject,Occurrences,fill=0) %&gt;%
+  ungroup() %&gt;%
+  mutate_each(funs((. + 1) / sum(. + 1)), -Word) %&gt;% # Fraction of word usage by each coach
+  mutate(LogRatio = log2(`Mike Sullivan`/`Peter DeBoer`)) %&gt;%
+  arrange(LogRatio) %&gt;%
+  group_by(LogRatio &gt; 0) %&gt;%
+  mutate(Team = ifelse(LogRatio &gt; 0,&quot;Pittsburgh&quot;,&quot;San Jose&quot;)) %&gt;%
+  top_n(10, abs(LogRatio)) %&gt;% # Get top 10 words in each direction
+  ungroup()
+
+# Plot of top 10 words most often used by each coach relative to the other
+ggplot(data=coach.ratios,aes(x=reorder(Word,LogRatio),y=LogRatio,fill=Team)) +
+  geom_bar(stat=&quot;identity&quot;,show.legend=F) +
+  scale_fill_manual(values=team.colors) +
+  xlab(&quot;Word&quot;) +
+  ylab(&quot;Log Ratio (Sullivan vs. DeBoer)&quot;) +
+  coord_flip() +
+  theme_bw(15)</code></pre>
+<p><img src="/post/Text-Analysis-Hockey-Coaches_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Results here are largely uninteresting, with both coaches employing a smattering of different hockey-centric words and qualifiers. Of the few standout words, we should probably expect Sullivan to refer to his players ‘<a href="https://en.wikipedia.org/wiki/Sidney_Crosby">Sid</a>’ and ‘<a href="https://en.wikipedia.org/wiki/Evgeni_Malkin">Geno</a>’ more often than his counterpart, and DeBoer to refer to his opponent as ‘Pittsburgh’.</p>
+<p>Another way to make the comparision between the coaches is by calculating the <em>tf-idf</em> for each word. This value is obtained by multiplying the <em>term frequency</em>, the fraction of occurrences of the word in the text, by the <em>inverse document frequency</em>, the log of the ratio of the total number of ‘documents’ to the number of documents in which the word in question appears. This value is higher for words that appear more sparingly across documents. For this analysis, if we only considered the two sets of texts provided by each coach as the two documents, we would only obtain two possible values for tf-idf, one of which being 0. Instead, we will split the text by individual interview, then recombine the top words for each interview by coach in the plot.</p>
+<pre class="r"><code># TF-IDF
+
+# Number of occurences of each word by interview
+all.coaches.words &lt;- coaches.words %&gt;%
+  count(Subject,Word,Label,sort=T) %&gt;%
+  ungroup()
+
+# Total words per interview
+total.words &lt;- coaches.words %&gt;%
+  count(Subject, Label) %&gt;%
+  ungroup()
+
+# Get top words by TF-IDF for each interview
+top.words.tf &lt;- left_join(all.coaches.words,total.words,by=c(&quot;Subject&quot;,&quot;Label&quot;)) %&gt;%
+  rename(Occurrences=n.x,Total=n.y) %&gt;%
+  mutate(Document = paste(Subject,Label)) %&gt;% # Merge subject and label for use in bind_tf_idf function
+  bind_tf_idf(Word,Document,Occurrences) %&gt;%
+  arrange(desc(tf_idf)) %&gt;%
+  mutate(Word = factor(Word, levels = rev(unique(Word)))) %&gt;%
+  group_by(Document,Label) %&gt;% 
+  top_n(1) %&gt;% 
+  ungroup()
+
+ggplot(top.words.tf, aes(Word, tf_idf, fill = Subject)) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = F) +
+  facet_wrap(~Subject, ncol = 2, scales = &quot;free_y&quot;) +
+  scale_fill_manual(values = team.colors) +
+  ylab(&quot;tf-idf&quot;) +
+  coord_flip() + 
+  theme_bw(15)</code></pre>
+<p><img src="/post/Text-Analysis-Hockey-Coaches_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Notice that there are fewer hockey-centric terms here, as these would probably be used in many of the interviews. We find some references to coaches’ own players again (including Long Beach Native™ <a href="https://en.wikipedia.org/wiki/Matt_Nieto">Matt Nieto</a>), along with a reminder that I should have removed individual numbers from the text before running the analyses (my bad!). Otherwise, we get a small glimpse into the mindset of each coach, with Sullivan using words like ‘commitment’, ‘expectation’, ‘adapting’, and DeBoer using words like ‘composure’, ‘rythym’, and ‘control’</p>
+<p>Through DeBoer’s words we also get a reminder that <a href="http://muhammadali.com/">Muhammad Ali</a> had passed away while this series took place. RIP.</p>
+</div>
+<div id="sentiment-analysis" class="section level3">
+<h3>Sentiment Analysis</h3>
+<p>We can apply sentiment analysis techniques to the interviews to get an idea of the mindset of the coaches over the course of the series. A number of sentiment lexicons, associating individual words to emotions or feelings, are available through the <code>tidytext</code> package. We first use the <a href="http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm">NRC Word-Emotion Association Lexicon</a>, which categorizes each word into a number of categories (positive, negative, anger, anticipation, disgust, fear, joy, sadness, surprise, and trust). Here’s a snippet to get a sense of the <code>nrc</code> lexicon.</p>
+<pre class="r"><code>## Sentiment Categories
+
+# Prepare sentiment dataset
+nrc &lt;- sentiments %&gt;%
+  filter(lexicon == &quot;nrc&quot;) %&gt;%
+  select(word, sentiment) %&gt;%
+  rename(Word = word, Sentiment = sentiment)
+
+head(nrc)</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##        Word Sentiment
+##       &lt;chr&gt;     &lt;chr&gt;
+## 1    abacus     trust
+## 2   abandon      fear
+## 3   abandon  negative
+## 4   abandon   sadness
+## 5 abandoned     anger
+## 6 abandoned      fear</code></pre>
+<p>We count for each coach the frequency of words falling under each sentiment category and then plot the sentiment over time. This is done my using <code>inner_join</code> from the <code>dplyr</code> package to merge in the sentiment information from the <code>nrc</code> lexicon to the words in the coach text.</p>
+<pre class="r"><code># Count the total number of words used by each coach each interview
+coaches.words.by.interview &lt;- coaches.words %&gt;%
+  group_by(Subject,Label) %&gt;%
+  mutate(TotalWords = n()) %&gt;%
+  ungroup() %&gt;%
+  distinct(Subject, Label, TotalWords)
+
+coaches.word.by.sentiment &lt;- coaches.words %&gt;%
+  inner_join(nrc, by = &quot;Word&quot;) %&gt;%
+  count(Sentiment,Label,Subject) %&gt;% # Count occurrences of each word by each coach in each interview
+  rename(Occurrences = n) %&gt;%
+  inner_join(coaches.words.by.interview, by = c(&quot;Label&quot;,&quot;Subject&quot;)) %&gt;% # Merge total words
+  mutate(Frequency = Occurrences/TotalWords)
+
+# Plot the sentiment trajectories over time
+ggplot(data=coaches.word.by.sentiment,aes(x=Label,y=Frequency,color=Subject, group=Subject)) +
+  facet_wrap(~Sentiment, nrow=5) +
+  geom_line(show.legend=F) +
+  geom_point(show.legend=F) +
+  scale_color_manual(values = team.colors) +
+  xlab(&quot;Interview&quot;) +
+  theme_bw(15) +
+  theme(axis.text.x = element_text(angle=90))</code></pre>
+<p><img src="/post/Text-Analysis-Hockey-Coaches_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Notice the high positivity from Pittsburgh’s Sullivan in the days following Game 4 (after going up 3 games to 1) and San Jose’s DeBoer after Game 5 (a win that staved off elimination). Also check out the spike in trust in the days following the Game 1 loss by the Sharks, which may reflect DeBoer rallying his troops for an important Game 2. We can see spikes in anticipation for Sullivan before (what turned out to be) the decisive Game 6. On the other hand, there is a small spike in anger for DeBoer after losing the Stanley Cup (understandable!).</p>
+<p>Alternatively, we can simplify analysis and look at the difference between positive and negative words used by each coach over time. Here we use <a href="https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html">Bing Liu’s lexicon</a>, which categorizes words simply as positive or negative.</p>
+<pre class="r"><code>## Positive vs. Negative
+
+# Get top 10 positive and negative words used by each coach and plot
+sentiment.words &lt;- coaches.words %&gt;%
+  inner_join(get_sentiments(&quot;bing&quot;), by=c(&quot;Word&quot;=&quot;word&quot;)) %&gt;%
+  rename(Sentiment = sentiment) %&gt;%
+  count(Word,Subject,Sentiment,sort=T) %&gt;%
+  ungroup() %&gt;%
+  group_by(Subject,Sentiment) %&gt;%
+  top_n(10) %&gt;%
+  rename(Occurrences = n)  %&gt;%
+  arrange(Subject,Sentiment,Word)
+
+ggplot(data=sentiment.words,aes(x=reorder(factor(Word),Occurrences),y=Occurrences,fill=Subject)) +
+  geom_bar(stat=&quot;identity&quot;,show.legend=F) +
+  facet_wrap(~Sentiment + Subject, scales=&quot;free_y&quot;) +
+  scale_fill_manual(values = team.colors) +
+  xlab(&quot;Word&quot;) +
+  coord_flip() +
+  theme_bw(15)</code></pre>
+<p><img src="/post/Text-Analysis-Hockey-Coaches_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>In general, nothing unexpected here. The most positive word for each coach is ‘win’. Here we see how tricky text analysis can be in most cases. For example, ‘hard’, the most often used negative word by each coach, probably refers to ‘playing hard’, which in a hockey context, should in fact be considerd as a positive. Also, some hockey specific words have their meaning distorted in this lexicon, such as ‘kill’, which in this context refers to penalty kills. Finally, ‘burns’ in this case refers to <a href="https://en.wikipedia.org/wiki/Brent_Burns">Brent Burns</a>, and is almost certainly not a negative; in fact, he was a <a href="https://www.nhl.com/news/norris-trophy-finalists/c-280515914">Norris finalist</a> that season!</p>
+<p>Keeping that in mind, we plot the positivity of each coach over time.</p>
+<pre class="r"><code># Find the difference between number of positive and negative words 
+# from each interview for each coach and plot
+positive.negative &lt;- coaches.words %&gt;%
+  inner_join(get_sentiments(&quot;bing&quot;), by=c(&quot;Word&quot;=&quot;word&quot;)) %&gt;%
+  rename(Sentiment = sentiment) %&gt;%
+  count(Subject, Label, Sentiment) %&gt;%
+  spread(Sentiment, n, fill = 0) %&gt;%
+  mutate(Positivity = positive - negative) %&gt;%
+  select(-positive,-negative)
+
+ggplot(positive.negative, aes(x=Label, y=Positivity, fill = Subject)) +
+  geom_bar(alpha = 0.8, stat = &quot;identity&quot;, show.legend = FALSE) +
+  facet_wrap(~Subject) +
+  scale_fill_manual(values = team.colors) +
+  xlab(&quot;Interview&quot;) +
+  theme_bw(15) + 
+  theme(axis.text.x = element_text(angle=90))</code></pre>
+<p><img src="/post/Text-Analysis-Hockey-Coaches_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>We notice the two tallest bars for each coach occur in post-game interviews for games the respective coach won, with the largest bar occurring on the post-game interview after the Penguins Cup win. The only overall negative interviews were by DeBoer, after a particularly devastating Game 2 overtime loss, and the day after a loss putting the Sharks down 3 games to 1.</p>
+</div>
+<div id="a-few-things-to-consider" class="section level3">
+<h3>A Few Things To Consider</h3>
+<p>As seen at several points in the above analyses, focusing only on individual words leads to lost context. Typically, one would also want to consider several words in a row in order to keep some context and improve the analyses. In text mining literature, we refer to these text chunks as <em>n-grams</em>, where n refers to the number of consecutive words to consider at once. In particular, bigrams represent chunks of two words at a time.</p>
+<p>The <code>tidytext</code> package allows us to extract the bigrams from the text. We further separate the two words in each bigram and filter out those where either the first or second word is a stop word. Here are a few examples of common bigrams in the coach interviews:</p>
+<pre class="r"><code>## Bigrams
+
+# Collect bigrams from text
+bigrams &lt;- coaches.text %&gt;%
+  unnest_tokens(Bigram, Text, token=&quot;ngrams&quot;, n=2) %&gt;%
+  separate(Bigram,c(&quot;Word1&quot;,&quot;Word2&quot;),sep=&quot; &quot;)
+
+# Count bigrams, show those that appear at least 5 times
+bigram.counts &lt;- bigrams %&gt;%
+  filter(!Word1 %in% stop_words$word) %&gt;%
+  filter(!Word2 %in% stop_words$word) %&gt;%
+  count(Word1,Word2,sort=T) %&gt;%
+  rename(Occurrences = n) %&gt;%
+  filter(Occurrences &gt;= 5)
+
+bigram.counts</code></pre>
+<pre><code>## # A tibble: 15 x 3
+##        Word1   Word2 Occurrences
+##        &lt;chr&gt;   &lt;chr&gt;       &lt;int&gt;
+##  1      post  season          21
+##  2       san    jose          14
+##  3  coaching   staff          13
+##  4     power    play          12
+##  5 extremely    hard          10
+##  6      team     win          10
+##  7      zone    time           9
+##  8   scoring chances           8
+##  9       top players           7
+## 10   regular  season           6
+## 11   stanley     cup           6
+## 12  muhammad     ali           5
+## 13     score   goals           5
+## 14      shot   clock           5
+## 15  terrific     job           5</code></pre>
+<p>Again, no real surprises from what someone would expect a hockey coach to be talking about, save for another reminder of Muhammad Ali’s passing.</p>
+<p>In particular, for sentiment analysis, one needs to pay attention to negation. For example, if we run analysis on individual words, and one such word was ‘good’, we would assume this would be associated with a positive sentiment. This is obviously not the case if ‘good’ were immediately preceded by ‘not’. In the case of the coaches interviews, the following snippet shows a few instances that may have caused some issues in our previous analysis, though based on the counts, these may be negligble (indeed, if terms like ‘not afraid’ or ‘not worried’ were brought up, this may be a signal that the team is, in fact, afraid or worried).</p>
+<pre class="r"><code>negation.words &lt;- c(&quot;not&quot;, &quot;no&quot;, &quot;never&quot;, &quot;without&quot;)
+
+# Find words preceded by negation words
+negated.words &lt;- bigrams %&gt;%
+  filter(Word1 %in% negation.words) %&gt;% # First word of bigram is a negation word
+  inner_join(get_sentiments(&quot;bing&quot;), by = c(Word2 = &quot;word&quot;)) %&gt;% # Second word appears in sentiment data set
+  count(Word1, Word2, sentiment, sort = TRUE) %&gt;%
+  ungroup()%&gt;%
+  rename(Sentiment = sentiment, Occurrences = n)
+
+negated.words</code></pre>
+<pre><code>## # A tibble: 13 x 4
+##    Word1       Word2 Sentiment Occurrences
+##    &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;       &lt;int&gt;
+##  1   not      enough  positive           3
+##  2    no       magic  positive           2
+##  3   not        like  positive           2
+##  4    no       burns  negative           1
+##  5    no       issue  negative           1
+##  6   not      afraid  negative           1
+##  7   not   available  positive           1
+##  8   not complaining  negative           1
+##  9   not   concerned  negative           1
+## 10   not        easy  positive           1
+## 11   not       ideal  positive           1
+## 12   not   realistic  positive           1
+## 13   not     worried  negative           1</code></pre>
+<p>That’s probably enough for now. I assume the extreme reserve these coaches take with regard to the media is a pretty large limitation for text analysis of their interviews, though at least we were able to see some interesting, if not largely expected results. I have some ideas for applications of these kind of techniques on other kinds of hockey-centric text data (maybe making use of Twitter…), but these will have to wait for another time!</p>
+</div>

@@ -1,7 +1,7 @@
-baseURL: https://example.com
+baseURL: https://mathieubray.com
 languageCode: en
 DefaultContentLanguage: en
-title: Website of Jane Doe
+title: Mathieu Bray
 theme: anatole
 summarylength: 10
 enableEmoji: yes
@@ -27,3 +27,6 @@ related:
       weight: 80
   threshold: 80
   toLower: yes
+permalinks:
+  page:
+    post: /:year/:month/:day/:slug

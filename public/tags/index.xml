@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Website</title>
+    <link>http://localhost:4321/tags/</link>
+    <description>Recent content in Tags on Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 25 Nov 2017 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:4321/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>IMDb</title>
+      <link>http://localhost:4321/tags/imdb/</link>
+      <pubDate>Sat, 25 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/imdb/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>http://localhost:4321/tags/r/</link>
+      <pubDate>Sat, 25 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/r/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Ggraph</title>
+      <link>http://localhost:4321/tags/ggraph/</link>
+      <pubDate>Wed, 19 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/ggraph/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>KPD</title>
+      <link>http://localhost:4321/tags/kpd/</link>
+      <pubDate>Wed, 19 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/kpd/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Ompr</title>
+      <link>http://localhost:4321/tags/ompr/</link>
+      <pubDate>Wed, 19 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/ompr/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Ggimage</title>
+      <link>http://localhost:4321/tags/ggimage/</link>
+      <pubDate>Wed, 24 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/ggimage/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Ggiraph</title>
+      <link>http://localhost:4321/tags/ggiraph/</link>
+      <pubDate>Wed, 24 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/ggiraph/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Ggmap</title>
+      <link>http://localhost:4321/tags/ggmap/</link>
+      <pubDate>Wed, 24 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/ggmap/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Hockey</title>
+      <link>http://localhost:4321/tags/hockey/</link>
+      <pubDate>Wed, 24 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/hockey/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Leaflet</title>
+      <link>http://localhost:4321/tags/leaflet/</link>
+      <pubDate>Wed, 24 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/leaflet/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>SQL</title>
+      <link>http://localhost:4321/tags/sql/</link>
+      <pubDate>Wed, 29 Mar 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/sql/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Tidytext</title>
+      <link>http://localhost:4321/tags/tidytext/</link>
+      <pubDate>Sat, 11 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/tags/tidytext/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,744 @@
+<!doctype html>
+<html
+  dir="ltr"
+  lang="en"
+  data-theme=""
+  
+    class="html theme--light"
+  
+><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=4321&amp;path=livereload" data-no-instant defer></script><link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/androidstudio.min.css"
+  />
+  <script 
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js">
+  </script>
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/r.min.js">
+  </script>
+
+<head>
+  <meta charset="utf-8" />
+  <title>
+    
+      
+        Extract Mendeley Notes Using R |
+      Mathieu Bray
+
+  </title>
+
+  <meta name="generator" content="Hugo 0.125.4"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="author" content="Mathieu Bray" />
+  <meta
+    name="description"
+    content="Statistics Leader / Dirigeant de Statistiques"
+  />
+  
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/scss/main.min.df52ef6442456ba809091d44dfa61a4c60e4f5142282e2a253b9144129c97fb1.css"
+      integrity="sha256-31LvZEJFa6gJCR1E36YaTGDk9RQiguKiU7kUQSnJf7E="
+      crossorigin="anonymous"
+      type="text/css"
+    />
+  
+
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.73ccfdf28df555e11009c13c20ced067af3cb021504cba43644c705930428b00.css"
+    integrity="sha256-c8z98o31VeEQCcE8IM7QZ688sCFQTLpDZExwWTBCiwA="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+    
+    
+    <link
+      rel="stylesheet"
+      href="/css/syntax.min.166034ca0e7d8585b6763c3c4ab38da2a1b9e314b61f0905edf117ecc19bd4bc.css"
+      integrity="sha256-FmA0yg59hYW2djw8SrONoqG54xS2HwkF7fEX7MGb1Lw="
+      crossorigin="anonymous"
+      media="screen"
+    />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
+    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
+    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
+    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
+    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.icofavicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/favicon.icoapple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon.icofavicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon.icofavicon-16x16.png" />
+
+  <link rel="canonical" href="http://localhost:4321/2017/03/29/extract-notes-mendeley/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.f9132794301a01ff16550ed66763482bd848f62243d278f5e550229a158bfd32.js"
+    integrity="sha256-&#43;RMnlDAaAf8WVQ7WZ2NIK9hI9iJD0nj15VAimhWL/TI="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.d6d329d93844b162e8bed1e915619625ca91687952177552b9b3e211014a2957.js"
+      integrity="sha256-1tMp2ThEsWLovtHpFWGWJcqRaHlSF3VSubPiEQFKKVc="
+      crossorigin="anonymous"
+    ></script>
+  
+
+  
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"><meta name="twitter:title" content="Extract Mendeley Notes Using R">
+<meta name="twitter:description" content="Code for this analysis is availabile on Github
+Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R.">
+
+
+
+  
+  <meta property="og:url" content="http://localhost:4321/2017/03/29/extract-notes-mendeley/">
+  <meta property="og:site_name" content="Website">
+  <meta property="og:title" content="Extract Mendeley Notes Using R">
+  <meta property="og:description" content="Code for this analysis is availabile on Github
+Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-03-29T00:00:00+00:00">
+    <meta property="article:modified_time" content="2017-03-29T00:00:00+00:00">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="SQL">
+
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Extract Mendeley Notes Using R",
+        "headline": "Extract Mendeley Notes Using R",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Code for this analysis is availabile on Github\nThought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R.
+
+
+      
+
+
+    ",
+        "inLanguage": "en",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:4321\/2017\/03\/29\/extract-notes-mendeley\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "Mathieu Bray"
+        },
+        "copyrightYear" : "2017",
+        "dateCreated": "2017-03-29T00:00:00.00Z",
+        "datePublished": "2017-03-29T00:00:00.00Z",
+        "dateModified": "2017-03-29T00:00:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "Mathieu Bray",
+            "url": "http://localhost:4321/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http:\/\/localhost:4321\/favicons\/favicon.icofavicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "http:\/\/localhost:4321\/2017\/03\/29\/extract-notes-mendeley\/",
+        "wordCount" : "1998",
+        "genre" : [ 
+      
+      "R"
+
+    ],
+        "keywords" : [ 
+      
+      "R"
+
+    
+      
+        ,
+
+      
+      "SQL"
+
+    ]
+    }
+  </script>
+
+
+</head>
+<body class="body">
+    <div class="wrapper">
+      <aside
+        
+          class="wrapper__sidebar"
+        
+      ><div
+  class="sidebar
+    .
+  "
+>
+  <div class="sidebar__content">
+    <div class="sidebar__introduction">
+      <img
+        class="sidebar__introduction-profileimage"
+        src="/images/professional-headshot.jpg"
+        alt="profile picture"
+      />
+      
+        <div class="sidebar__introduction-title">
+          <a href="/">Mathieu Bray</a>
+        </div>
+      
+      <div class="sidebar__introduction-description">
+        <p>Statistics Leader / Dirigeant de Statistiques</p>
+      </div>
+    </div>
+    <ul class="sidebar__list">
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://linkedin.com/in/mathieubray/"
+            target="_blank"
+            rel="noopener me"
+            aria-label="Linkedin"
+            title="Linkedin"
+          >
+            <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+        <li class="sidebar__list-item">
+          <a
+            href="https://github.com/mathieubray/"
+            target="_blank"
+            rel="noopener me"
+            aria-label="GitHub"
+            title="GitHub"
+          >
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+        <li class="sidebar__list-item">
+          <a
+            href="mailto:bray.mathieu@gmail.com"
+            target="_blank"
+            rel="noopener me"
+            aria-label="e-mail"
+            title="e-mail"
+          >
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div><footer class="footer footer__sidebar">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Mathieu Bray
+        2024
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script><script>hljs.initHighlightingOnLoad();</script>
+</div>
+</aside>
+      <main
+        
+          class="wrapper__main"
+        
+      >
+        <header class="header"><div
+  class="
+    .
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+    <span aria-hidden="true" class="navbar-burger__line"></span>
+  </a>
+  <nav class="nav">
+    <ul class="nav__list" id="navMenu">
+      
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/"
+              
+              title=""
+              >Blog</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >Bio</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/cv.pdf"
+              
+              title=""
+              >CV - English</a
+            >
+          </li>
+        
+
+      
+        
+        
+          <li class="nav__list-item">
+            
+            <a
+              
+              href="/cv_francais.pdf"
+              
+              title=""
+              >CV - Français</a
+            >
+          </li>
+        
+
+      
+    </ul>
+    <ul class="nav__list nav__list--end">
+      
+      
+        <li class="nav__list-item">
+          <div class="themeswitch">
+            <a title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+      
+    </ul>
+  </nav>
+</div>
+</header>
+  <div
+    class="post 
+      .
+    "
+  >
+    
+    <div class="post__content">
+      
+        <h1>Extract Mendeley Notes Using R</h1>
+      
+      
+        <ul class="post__meta">
+          <li class="post__meta-item">
+            <em class="fas fa-calendar-day post__meta-icon"></em>
+            <span class="post__meta-text"
+              >
+                
+                  29 Mar 2017
+                
+
+              
+            </span>
+          </li>
+          <li class="post__meta-item">
+            <em class="fas fa-stopwatch post__meta-icon"></em>
+            <span class="post__meta-text">10-minute read</span>
+          </li>
+        </ul>
+      
+
+
+<p><em>Code for this analysis is availabile on <a href="https://gist.github.com/mathieubray/c7073f542f54b52d93247544521ad4a2">Github</a></em></p>
+<p>Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in <a href="https://www.mendeley.com/">Mendeley</a> using R. Basically I was having a similar problem as Daniel Hynk <a href="http://danielhnyk.cz/export-pdf-annotations-mendeley-csv-or-txt/">here</a>, which he solved using Python. I too use Mendeley as a reference manager, which also has the handy feature of allowing users to add their own annotations and notes to their saved documents. While I have been generally satisfied with Mendeley, I was in a situation where I wanted to put together a table containing some information on a set of papers I had been reading, including, in particular, the notes I had been adding. Unfortunately, Mendeley does not offer a simple option for doing this (some information is available for export to .bib or .xml).</p>
+<p>Anyway, Mendeley stores all the information about a user’s account locally in an SQLite database. We can connect to this database and extract the information, including the notes. I’m not sure how much this tutorial will generalize to other reference management software suites, but I imagine the underlying mechanics are similar. This tutorial can also be treated as an introduction to database interaction using the <code>RSQLite</code> package, available from <a href="https://cran.r-project.org/web/packages/RSQLite/RSQLite.pdf">CRAN</a>.</p>
+<p>As always, let’s start by loading some handy libraries.</p>
+<pre class="r"><code>library(RSQLite) # Database 
+library(dplyr) # This really should be loaded by default always...
+library(tidyr) # &#39;spread&#39; function to change table from &#39;long&#39; to &#39;wide&#39; format </code></pre>
+<p>We first need to connect to the database. <a href="http://support.mendeley.com/customer/en/portal/articles/227951-how-do-i-locate-mendeley-desktop-database-files-on-my-computer-">Mendeley Support</a> lists how to find the local database path for each system. In Windows, the <code>mendeley.path</code>, as we will refer to it in R, will look something like <code>C:/Users/{username}/AppData/Local/Mendeley Ltd./Mendeley Desktop/{youremail}@{emailclient.com}@www.mendeley.com.sqlite</code>.</p>
+<pre class="r"><code># Connect to the database
+mendeley.connection = dbConnect(RSQLite::SQLite(),mendeley.path)</code></pre>
+<p>The Mendeley database contains a variety of tables. These can be listed by using the <code>dbListTables</code> funtion</p>
+<pre class="r"><code># Some of the tables available in the Mendeley database
+head(dbListTables(mendeley.connection),n=10)</code></pre>
+<pre><code>##  [1] &quot;CanonicalDocuments&quot;   &quot;DataCleaner&quot;          &quot;DocumentCanonicalIds&quot;
+##  [4] &quot;DocumentContributors&quot; &quot;DocumentDetailsBase&quot;  &quot;DocumentFields&quot;      
+##  [7] &quot;DocumentFiles&quot;        &quot;DocumentFolders&quot;      &quot;DocumentFoldersBase&quot; 
+## [10] &quot;DocumentKeywords&quot;</code></pre>
+<p>For each table, to get an idea of the contents, the list of variable names can be printed using the <code>dbListFields</code> function, illustrated here for the “Documents” table.</p>
+<pre class="r"><code># The variables available in the &#39;Documents&#39; table
+dbListFields(mendeley.connection,&quot;Documents&quot;)</code></pre>
+<pre><code>##  [1] &quot;id&quot;                       &quot;uuid&quot;                    
+##  [3] &quot;confirmed&quot;                &quot;deduplicated&quot;            
+##  [5] &quot;deletionPending&quot;          &quot;favourite&quot;               
+##  [7] &quot;read&quot;                     &quot;type&quot;                    
+##  [9] &quot;abstract&quot;                 &quot;added&quot;                   
+## [11] &quot;modified&quot;                 &quot;importer&quot;                
+## [13] &quot;note&quot;                     &quot;privacy&quot;                 
+## [15] &quot;title&quot;                    &quot;advisor&quot;                 
+## [17] &quot;articleColumn&quot;            &quot;applicationNumber&quot;       
+## [19] &quot;arxivId&quot;                  &quot;chapter&quot;                 
+## [21] &quot;citationKey&quot;              &quot;city&quot;                    
+## [23] &quot;code&quot;                     &quot;codeNumber&quot;              
+## [25] &quot;codeSection&quot;              &quot;codeVolume&quot;              
+## [27] &quot;committee&quot;                &quot;counsel&quot;                 
+## [29] &quot;country&quot;                  &quot;dateAccessed&quot;            
+## [31] &quot;day&quot;                      &quot;department&quot;              
+## [33] &quot;doi&quot;                      &quot;edition&quot;                 
+## [35] &quot;genre&quot;                    &quot;hideFromMendeleyWebIndex&quot;
+## [37] &quot;institution&quot;              &quot;internationalAuthor&quot;     
+## [39] &quot;internationalNumber&quot;      &quot;internationalTitle&quot;      
+## [41] &quot;internationalUserType&quot;    &quot;isbn&quot;                    
+## [43] &quot;issn&quot;                     &quot;issue&quot;                   
+## [45] &quot;language&quot;                 &quot;lastUpdate&quot;              
+## [47] &quot;legalStatus&quot;              &quot;length&quot;                  
+## [49] &quot;medium&quot;                   &quot;month&quot;                   
+## [51] &quot;originalPublication&quot;      &quot;owner&quot;                   
+## [53] &quot;pages&quot;                    &quot;pmid&quot;                    
+## [55] &quot;publication&quot;              &quot;publicLawNumber&quot;         
+## [57] &quot;publisher&quot;                &quot;reprintEdition&quot;          
+## [59] &quot;reviewedArticle&quot;          &quot;revisionNumber&quot;          
+## [61] &quot;sections&quot;                 &quot;seriesEditor&quot;            
+## [63] &quot;series&quot;                   &quot;seriesNumber&quot;            
+## [65] &quot;session&quot;                  &quot;shortTitle&quot;              
+## [67] &quot;sourceType&quot;               &quot;userType&quot;                
+## [69] &quot;volume&quot;                   &quot;year&quot;</code></pre>
+<p>I use the <code>extract.table</code> function defined below to effectively combine the actions of sending a database query (<code>dbSendQuery</code>), fetching the results (<code>dbFetch</code>), and freeing up the resources (<code>dbClearResult</code>).</p>
+<pre class="r"><code>extract.table &lt;- function(con,query){
+  
+  res &lt;- dbSendQuery(con,query) # Send query
+  
+  table &lt;- dbFetch(res) # Fetch table
+  
+  dbClearResult(res) # Free resources
+  
+  return(table)
+  
+}</code></pre>
+<p>In Mendeley, saved documents can be sorted into one or more user-defined folders. In my particular case, I was focusing on a set of recent papers I have been reading on the topic of <a href="https://en.wikipedia.org/wiki/Multidimensional_network">multilayer and dynamic network analysis</a>, which I had sorted into a folder appropriately named “Networks”. Based on the collection of tables shown earlier, it seems the “Folders” and “DocumentFolders” tables might come in handy. Note that I will use a mix of SQL commands and <code>dplyr</code> functions to get my desired results going forward.</p>
+<pre class="r"><code>dbListFields(mendeley.connection,&quot;Folders&quot;)</code></pre>
+<pre><code>##  [1] &quot;id&quot;                  &quot;uuid&quot;                &quot;name&quot;               
+##  [4] &quot;parentId&quot;            &quot;access&quot;              &quot;syncPolicy&quot;         
+##  [7] &quot;downloadFilesPolicy&quot; &quot;uploadFilesPolicy&quot;   &quot;publicUrl&quot;          
+## [10] &quot;description&quot;         &quot;creatorName&quot;         &quot;creatorProfileUrl&quot;</code></pre>
+<pre class="r"><code>folders &lt;- extract.table(mendeley.connection, &quot;SELECT id, name FROM Folders&quot;)
+
+dbListFields(mendeley.connection,&quot;DocumentFolders&quot;)</code></pre>
+<pre><code>## [1] &quot;documentId&quot; &quot;folderId&quot;   &quot;status&quot;</code></pre>
+<pre class="r"><code>document.folders &lt;- extract.table(mendeley.connection, &quot;SELECT folderId, documentId FROM DocumentFolders&quot;)</code></pre>
+<p>We first need to retrieve the internal ID assigned to the “Networks” folder, then extract the IDs associated with all documents in that folder.</p>
+<pre class="r"><code>relevant.folder.name &lt;- &quot;Networks&quot;
+
+# Extract interal ID for folder of interest
+relevant.folder.id &lt;- (folders %&gt;%
+  filter(name == relevant.folder.name))$id[1]
+
+# Extract internal IDs for all papers belonging to the folder of interest, using the folder ID
+relevant.papers &lt;- (document.folders %&gt;%
+  filter(folderId == relevant.folder.id))$documentId
+
+head(relevant.papers)</code></pre>
+<pre><code>## [1] 196 215 224 232 249 264</code></pre>
+<p>The “Documents”&quot; table contains the document title, among others (for illustration, I also collect the citation key assigned to each document). Here we simply need to extract the table, filtering to include only those documents of interest.</p>
+<pre class="r"><code># Collect title and citation key for all relevant documents
+relevant.documents &lt;- extract.table(mendeley.connection,&quot;SELECT id, citationKey, title FROM Documents&quot;) %&gt;% 
+  filter(id %in% relevant.papers) %&gt;%
+  rename(documentId = id)</code></pre>
+<pre><code>##   documentId  citationKey                                       title
+## 1        196 Oentaryo2016 Collective semi-supervised learning for ...
+## 2        215   Cortes2003 Computational methods for dynamic graphs...
+## 3        224     Paul2016 Null models and modularity based communi...
+## 4        232  Durante2016 Bayesian Learning of Dynamic Multilayer ...
+## 5        249        Bazzi Generative Benchmark Models for Mesoscal...
+## 6        264   Oselio2014 Multi-Layer Graph Analysis for Dynamic S...</code></pre>
+<p>Each document can have multiple authors, which are stored in the “DocumentContributors” table. Let’s take a quick peak at the raw table.</p>
+<pre class="r"><code>dbListFields(mendeley.connection,&quot;DocumentContributors&quot;)</code></pre>
+<pre><code>## [1] &quot;id&quot;           &quot;documentId&quot;   &quot;contribution&quot; &quot;firstNames&quot;  
+## [5] &quot;lastName&quot;</code></pre>
+<pre class="r"><code># Collect and concatenate authors for all relevant documents
+authors &lt;- extract.table(mendeley.connection,&quot;SELECT * FROM DocumentContributors&quot;)
+
+head(authors)</code></pre>
+<pre><code>##   id documentId   contribution  firstNames   lastName
+## 1  8          3 DocumentAuthor Genevera I.      Allen
+## 2  9          4 DocumentAuthor  Francis L.  Delmonico
+## 3 10          4 DocumentAuthor     Paul E.  Morrissey
+## 4 11          4 DocumentAuthor   George S.  Lipkowitz
+## 5 12          4 DocumentAuthor  Jeffrey S.      Stoff
+## 6 13          4 DocumentAuthor    Jonathan Himmelfarb</code></pre>
+<pre class="r"><code>unique(authors$contribution)</code></pre>
+<pre><code>## [1] &quot;DocumentAuthor&quot; &quot;DocumentEditor&quot;</code></pre>
+<p>The contribution field specifies whether the entry refers to an author or an editor. We reduce the table to our documents of interest and filter out the editors. To concatenate all of the authors into one string, we first concatenate the <code>lastName</code> and <code>firstName</code> using the <code>paste</code> function, then group by document and collapse each of the authors into one string, separated by a semi-colon (;), again using the <code>paste</code> funtion with the <code>collapse</code> option set.</p>
+<pre class="r"><code># Collect and concatenate authors for all relevant documents
+relevant.authors &lt;- authors %&gt;%
+  filter(contribution == &quot;DocumentAuthor&quot;,
+         documentId %in% relevant.papers) %&gt;%
+  mutate(fullName = paste(lastName,firstNames,sep=&quot;, &quot;)) %&gt;% # Concatenate first and last name
+  select(documentId,fullName)</code></pre>
+<pre><code>##   documentId               fullName
+## 1        196   Oentaryo, Richard J.
+## 2        196           Lim, Ee-Peng
+## 3        196 Chua, Freddy Chong Tat
+## 4        196           Low, Jia-Wei
+## 5        196              Lo, David
+## 6        215        Cortes, Corinna</code></pre>
+<pre class="r"><code>relevant.authors &lt;- relevant.authors %&gt;%
+  group_by(documentId) %&gt;%
+  summarize(authorsNames = paste(fullName,collapse=&quot;; &quot;)) # Concatenate all authors of a document together</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   documentId                                authorsNames
+##        &lt;int&gt;                                       &lt;chr&gt;
+## 1        196 Oentaryo, Richard J.; Lim, Ee-Peng; Chua...
+## 2        215 Cortes, Corinna; Pregibon, Daryl; Volins...
+## 3        224             Paul, Subhadeep; Chen, Yuguo...
+## 4        232 Durante, Daniele; Mukherjee, Nabanita; S...
+## 5        249 Bazzi, Marya; Jeub, Lucas G. S.; Arenas,...
+## 6        264 Oselio, Brandon; Kulesza, Alex; Hero, Al...</code></pre>
+<p>The tags associated with each document can be extracted and concatenated in a similar manner to the authors. Tags are located in the “DocumentTags” table.</p>
+<pre class="r"><code>dbListFields(mendeley.connection,&quot;DocumentTags&quot;)</code></pre>
+<pre><code>## [1] &quot;documentId&quot; &quot;tag&quot;</code></pre>
+<pre class="r"><code># Collect and concatenate tags for all relevant documents
+relevant.tags &lt;- extract.table(mendeley.connection, &quot;SELECT * FROM DocumentTags&quot;) %&gt;%
+  filter(documentId %in% relevant.papers) %&gt;%
+  group_by(documentId) %&gt;%
+  summarize(tagList = paste(tag,collapse=&quot;; &quot;))</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   documentId                                     tagList
+##        &lt;int&gt;                                       &lt;chr&gt;
+## 1        196                           social network...
+## 2        215 dynamic network; edge addition; node add...
+## 3        224 Newman-Girvan null model; SBM; community...
+## 4        232      dynamic network; multilayer network...
+## 5        249 Multilayer networks; community detection...
+## 6        264 dynamic SBM; dynamic network; multilayer...</code></pre>
+<p>Finally, we collect the document notes, located in the <code>FileNotes</code> table. In general, these would be stored similarly to tags, with one note per row and document ID specified, and can therefore be treated in the same manner as the tags to obtain a single string for each document. In my case, I had been annotating each paper in this folder with two notes, one for the main goal of each paper, introduced by “Goal:”, and one for the key insights or techniques used in the article, introduced by “Key:”. I classified each note into a <code>type</code> based on whether it represented a “Goal” or “Key” by splitting the note string by colon (:) and inspecting the first token.</p>
+<pre class="r"><code>dbListFields(mendeley.connection,&quot;FileNotes&quot;)</code></pre>
+<pre><code>##  [1] &quot;id&quot;           &quot;author&quot;       &quot;uuid&quot;         &quot;documentId&quot;  
+##  [5] &quot;fileHash&quot;     &quot;page&quot;         &quot;x&quot;            &quot;y&quot;           
+##  [9] &quot;note&quot;         &quot;modifiedTime&quot; &quot;createdTime&quot;  &quot;unlinked&quot;    
+## [13] &quot;baseNote&quot;     &quot;color&quot;        &quot;profileUuid&quot;</code></pre>
+<pre class="r"><code># Collect notes
+relevant.notes &lt;- extract.table(mendeley.connection,&quot;SELECT documentId, note FROM FileNotes&quot;) %&gt;%
+  filter(documentId %in% relevant.papers) %&gt;%
+  rowwise() %&gt;%
+  mutate(type = tolower(trimws(unlist(strsplit(note,split=&quot;:&quot;)))[1]), # Extract for each document whether it is a &#39;Goal&#39; or a &#39;Key&#39;
+         note = paste(unlist(strsplit(note,split=&quot;:&quot;))[-1],collapse=&quot;:&quot;)) %&gt;% # Extract the actual note
+  ungroup() </code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   documentId                                        note  type
+##        &lt;int&gt;                                       &lt;chr&gt; &lt;chr&gt;
+## 1        249  Community detection in multilayer netwo...  goal
+## 2        249  Generate random multilayer partitions w...   key
+## 3        215  Survey of computational methods for dyn...  goal
+## 4        329  Network fusion for composite community ...   key
+## 5        329  Community detection in multilayer netwo...  goal
+## 6        328  Define a statistical model for dynamic ...  goal</code></pre>
+<p>Finally, to tidy the data such that each document is on its own row, I use the <code>spread</code> function in <code>tidyr</code>, which creates an individual variable for each <code>type</code>, whose entry for each document contains the relevant note.</p>
+<pre class="r"><code>relevant.notes &lt;- relevant.notes %&gt;%
+  spread(type,note)</code></pre>
+<pre><code>##   documentId                              goal
+## 1        196  Exploit multiple types of soc...
+## 2        215  Survey of computational metho...
+## 3        224  Community detection in multil...
+## 4        232  Flexible model fo dynamic mul...
+## 5        249  Community detection in multil...
+## 6        264  Estimate the true adjacency m...
+##                                 key
+## 1  Collective semi-supervised le...
+## 2                             NA...
+## 3  Newman-Girvan modularity or e...
+## 4  Characterize edges as conditi...
+## 5  Generate random multilayer pa...
+## 6  Latent variable model which d...</code></pre>
+<p>At this point, We have collected all of our desired information, and it’s a simple matter of joining all the tables together, using <code>documentId</code> as the primary key.</p>
+<pre class="r"><code># Join the datasets together
+relevant.files &lt;- relevant.documents %&gt;%
+  left_join(relevant.authors, by=&quot;documentId&quot;) %&gt;%
+  left_join(relevant.tags, by=&quot;documentId&quot;) %&gt;%
+  left_join(relevant.notes, by=&quot;documentId&quot;)</code></pre>
+<pre><code>##   documentId  citationKey                             title
+## 1        196 Oentaryo2016 Collective semi-supervised lea...
+## 2        215   Cortes2003 Computational methods for dyna...
+## 3        224     Paul2016 Null models and modularity bas...
+## 4        232  Durante2016 Bayesian Learning of Dynamic M...
+## 5        249        Bazzi Generative Benchmark Models fo...
+## 6        264   Oselio2014 Multi-Layer Graph Analysis for...
+##                        authorsNames                           tagList
+## 1 Oentaryo, Richard J.; Lim, Ee-...                 social network...
+## 2 Cortes, Corinna; Pregibon, Dar... dynamic network; edge addition...
+## 3   Paul, Subhadeep; Chen, Yuguo... Newman-Girvan null model; SBM;...
+## 4 Durante, Daniele; Mukherjee, N... dynamic network; multilayer ne...
+## 5 Bazzi, Marya; Jeub, Lucas G. S... Multilayer networks; community...
+## 6 Oselio, Brandon; Kulesza, Alex... dynamic SBM; dynamic network; ...
+##                                goal                               key
+## 1  Exploit multiple types of soc...  Collective semi-supervised le...
+## 2  Survey of computational metho...                             NA...
+## 3  Community detection in multil...  Newman-Girvan modularity or e...
+## 4  Flexible model fo dynamic mul...  Characterize edges as conditi...
+## 5  Community detection in multil...  Generate random multilayer pa...
+## 6  Estimate the true adjacency m...  Latent variable model which d...</code></pre>
+<p>The final data frame is ready for any kind of fancy analysis, or can be exported to CSV format (or whatever format you prefer).</p>
+<p>That’s basically it for now, but check back soon! I do plan on having some more interesting posts coming up shortly…</p>
+</div>
+    <div class="post__footer">
+      
+        <span><a class="category" href="/categories/r/">R</a></span>
+
+
+      
+
+      
+        <span><a class="tag" href="/tags/r/">R</a><a class="tag" href="/tags/sql/">SQL</a></span>
+
+
+      
+    </div>
+
+    
+  </div>
+
+      </main>
+    </div><footer class="footer footer__base">
+  <ul class="footer__list">
+    <li class="footer__item">
+      &copy;
+      
+        Mathieu Bray
+        2024
+      
+    </li>
+    
+  </ul>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.1248fa75275e5ef0cbef27e8c1e27dc507c445ae3a2c7d2ed0be0809555dac64.js"
+    integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
+    crossorigin="anonymous"
+  ></script><script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

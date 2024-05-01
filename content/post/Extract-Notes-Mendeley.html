@@ -1,0 +1,242 @@
+---
+title: "Extract Mendeley Notes Using R"
+author: "Mathieu Bray"
+date: 2017-03-29
+categories: ["R"]
+tags: ["R", "SQL"]
+slug: "Extract-Notes-Mendeley"
+---
+
+
+
+<p><em>Code for this analysis is availabile on <a href="https://gist.github.com/mathieubray/c7073f542f54b52d93247544521ad4a2">Github</a></em></p>
+<p>Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in <a href="https://www.mendeley.com/">Mendeley</a> using R. Basically I was having a similar problem as Daniel Hynk <a href="http://danielhnyk.cz/export-pdf-annotations-mendeley-csv-or-txt/">here</a>, which he solved using Python. I too use Mendeley as a reference manager, which also has the handy feature of allowing users to add their own annotations and notes to their saved documents. While I have been generally satisfied with Mendeley, I was in a situation where I wanted to put together a table containing some information on a set of papers I had been reading, including, in particular, the notes I had been adding. Unfortunately, Mendeley does not offer a simple option for doing this (some information is available for export to .bib or .xml).</p>
+<p>Anyway, Mendeley stores all the information about a user’s account locally in an SQLite database. We can connect to this database and extract the information, including the notes. I’m not sure how much this tutorial will generalize to other reference management software suites, but I imagine the underlying mechanics are similar. This tutorial can also be treated as an introduction to database interaction using the <code>RSQLite</code> package, available from <a href="https://cran.r-project.org/web/packages/RSQLite/RSQLite.pdf">CRAN</a>.</p>
+<p>As always, let’s start by loading some handy libraries.</p>
+<pre class="r"><code>library(RSQLite) # Database 
+library(dplyr) # This really should be loaded by default always...
+library(tidyr) # &#39;spread&#39; function to change table from &#39;long&#39; to &#39;wide&#39; format </code></pre>
+<p>We first need to connect to the database. <a href="http://support.mendeley.com/customer/en/portal/articles/227951-how-do-i-locate-mendeley-desktop-database-files-on-my-computer-">Mendeley Support</a> lists how to find the local database path for each system. In Windows, the <code>mendeley.path</code>, as we will refer to it in R, will look something like <code>C:/Users/{username}/AppData/Local/Mendeley Ltd./Mendeley Desktop/{youremail}@{emailclient.com}@www.mendeley.com.sqlite</code>.</p>
+<pre class="r"><code># Connect to the database
+mendeley.connection = dbConnect(RSQLite::SQLite(),mendeley.path)</code></pre>
+<p>The Mendeley database contains a variety of tables. These can be listed by using the <code>dbListTables</code> funtion</p>
+<pre class="r"><code># Some of the tables available in the Mendeley database
+head(dbListTables(mendeley.connection),n=10)</code></pre>
+<pre><code>##  [1] &quot;CanonicalDocuments&quot;   &quot;DataCleaner&quot;          &quot;DocumentCanonicalIds&quot;
+##  [4] &quot;DocumentContributors&quot; &quot;DocumentDetailsBase&quot;  &quot;DocumentFields&quot;      
+##  [7] &quot;DocumentFiles&quot;        &quot;DocumentFolders&quot;      &quot;DocumentFoldersBase&quot; 
+## [10] &quot;DocumentKeywords&quot;</code></pre>
+<p>For each table, to get an idea of the contents, the list of variable names can be printed using the <code>dbListFields</code> function, illustrated here for the “Documents” table.</p>
+<pre class="r"><code># The variables available in the &#39;Documents&#39; table
+dbListFields(mendeley.connection,&quot;Documents&quot;)</code></pre>
+<pre><code>##  [1] &quot;id&quot;                       &quot;uuid&quot;                    
+##  [3] &quot;confirmed&quot;                &quot;deduplicated&quot;            
+##  [5] &quot;deletionPending&quot;          &quot;favourite&quot;               
+##  [7] &quot;read&quot;                     &quot;type&quot;                    
+##  [9] &quot;abstract&quot;                 &quot;added&quot;                   
+## [11] &quot;modified&quot;                 &quot;importer&quot;                
+## [13] &quot;note&quot;                     &quot;privacy&quot;                 
+## [15] &quot;title&quot;                    &quot;advisor&quot;                 
+## [17] &quot;articleColumn&quot;            &quot;applicationNumber&quot;       
+## [19] &quot;arxivId&quot;                  &quot;chapter&quot;                 
+## [21] &quot;citationKey&quot;              &quot;city&quot;                    
+## [23] &quot;code&quot;                     &quot;codeNumber&quot;              
+## [25] &quot;codeSection&quot;              &quot;codeVolume&quot;              
+## [27] &quot;committee&quot;                &quot;counsel&quot;                 
+## [29] &quot;country&quot;                  &quot;dateAccessed&quot;            
+## [31] &quot;day&quot;                      &quot;department&quot;              
+## [33] &quot;doi&quot;                      &quot;edition&quot;                 
+## [35] &quot;genre&quot;                    &quot;hideFromMendeleyWebIndex&quot;
+## [37] &quot;institution&quot;              &quot;internationalAuthor&quot;     
+## [39] &quot;internationalNumber&quot;      &quot;internationalTitle&quot;      
+## [41] &quot;internationalUserType&quot;    &quot;isbn&quot;                    
+## [43] &quot;issn&quot;                     &quot;issue&quot;                   
+## [45] &quot;language&quot;                 &quot;lastUpdate&quot;              
+## [47] &quot;legalStatus&quot;              &quot;length&quot;                  
+## [49] &quot;medium&quot;                   &quot;month&quot;                   
+## [51] &quot;originalPublication&quot;      &quot;owner&quot;                   
+## [53] &quot;pages&quot;                    &quot;pmid&quot;                    
+## [55] &quot;publication&quot;              &quot;publicLawNumber&quot;         
+## [57] &quot;publisher&quot;                &quot;reprintEdition&quot;          
+## [59] &quot;reviewedArticle&quot;          &quot;revisionNumber&quot;          
+## [61] &quot;sections&quot;                 &quot;seriesEditor&quot;            
+## [63] &quot;series&quot;                   &quot;seriesNumber&quot;            
+## [65] &quot;session&quot;                  &quot;shortTitle&quot;              
+## [67] &quot;sourceType&quot;               &quot;userType&quot;                
+## [69] &quot;volume&quot;                   &quot;year&quot;</code></pre>
+<p>I use the <code>extract.table</code> function defined below to effectively combine the actions of sending a database query (<code>dbSendQuery</code>), fetching the results (<code>dbFetch</code>), and freeing up the resources (<code>dbClearResult</code>).</p>
+<pre class="r"><code>extract.table &lt;- function(con,query){
+  
+  res &lt;- dbSendQuery(con,query) # Send query
+  
+  table &lt;- dbFetch(res) # Fetch table
+  
+  dbClearResult(res) # Free resources
+  
+  return(table)
+  
+}</code></pre>
+<p>In Mendeley, saved documents can be sorted into one or more user-defined folders. In my particular case, I was focusing on a set of recent papers I have been reading on the topic of <a href="https://en.wikipedia.org/wiki/Multidimensional_network">multilayer and dynamic network analysis</a>, which I had sorted into a folder appropriately named “Networks”. Based on the collection of tables shown earlier, it seems the “Folders” and “DocumentFolders” tables might come in handy. Note that I will use a mix of SQL commands and <code>dplyr</code> functions to get my desired results going forward.</p>
+<pre class="r"><code>dbListFields(mendeley.connection,&quot;Folders&quot;)</code></pre>
+<pre><code>##  [1] &quot;id&quot;                  &quot;uuid&quot;                &quot;name&quot;               
+##  [4] &quot;parentId&quot;            &quot;access&quot;              &quot;syncPolicy&quot;         
+##  [7] &quot;downloadFilesPolicy&quot; &quot;uploadFilesPolicy&quot;   &quot;publicUrl&quot;          
+## [10] &quot;description&quot;         &quot;creatorName&quot;         &quot;creatorProfileUrl&quot;</code></pre>
+<pre class="r"><code>folders &lt;- extract.table(mendeley.connection, &quot;SELECT id, name FROM Folders&quot;)
+
+dbListFields(mendeley.connection,&quot;DocumentFolders&quot;)</code></pre>
+<pre><code>## [1] &quot;documentId&quot; &quot;folderId&quot;   &quot;status&quot;</code></pre>
+<pre class="r"><code>document.folders &lt;- extract.table(mendeley.connection, &quot;SELECT folderId, documentId FROM DocumentFolders&quot;)</code></pre>
+<p>We first need to retrieve the internal ID assigned to the “Networks” folder, then extract the IDs associated with all documents in that folder.</p>
+<pre class="r"><code>relevant.folder.name &lt;- &quot;Networks&quot;
+
+# Extract interal ID for folder of interest
+relevant.folder.id &lt;- (folders %&gt;%
+  filter(name == relevant.folder.name))$id[1]
+
+# Extract internal IDs for all papers belonging to the folder of interest, using the folder ID
+relevant.papers &lt;- (document.folders %&gt;%
+  filter(folderId == relevant.folder.id))$documentId
+
+head(relevant.papers)</code></pre>
+<pre><code>## [1] 196 215 224 232 249 264</code></pre>
+<p>The “Documents”&quot; table contains the document title, among others (for illustration, I also collect the citation key assigned to each document). Here we simply need to extract the table, filtering to include only those documents of interest.</p>
+<pre class="r"><code># Collect title and citation key for all relevant documents
+relevant.documents &lt;- extract.table(mendeley.connection,&quot;SELECT id, citationKey, title FROM Documents&quot;) %&gt;% 
+  filter(id %in% relevant.papers) %&gt;%
+  rename(documentId = id)</code></pre>
+<pre><code>##   documentId  citationKey                                       title
+## 1        196 Oentaryo2016 Collective semi-supervised learning for ...
+## 2        215   Cortes2003 Computational methods for dynamic graphs...
+## 3        224     Paul2016 Null models and modularity based communi...
+## 4        232  Durante2016 Bayesian Learning of Dynamic Multilayer ...
+## 5        249        Bazzi Generative Benchmark Models for Mesoscal...
+## 6        264   Oselio2014 Multi-Layer Graph Analysis for Dynamic S...</code></pre>
+<p>Each document can have multiple authors, which are stored in the “DocumentContributors” table. Let’s take a quick peak at the raw table.</p>
+<pre class="r"><code>dbListFields(mendeley.connection,&quot;DocumentContributors&quot;)</code></pre>
+<pre><code>## [1] &quot;id&quot;           &quot;documentId&quot;   &quot;contribution&quot; &quot;firstNames&quot;  
+## [5] &quot;lastName&quot;</code></pre>
+<pre class="r"><code># Collect and concatenate authors for all relevant documents
+authors &lt;- extract.table(mendeley.connection,&quot;SELECT * FROM DocumentContributors&quot;)
+
+head(authors)</code></pre>
+<pre><code>##   id documentId   contribution  firstNames   lastName
+## 1  8          3 DocumentAuthor Genevera I.      Allen
+## 2  9          4 DocumentAuthor  Francis L.  Delmonico
+## 3 10          4 DocumentAuthor     Paul E.  Morrissey
+## 4 11          4 DocumentAuthor   George S.  Lipkowitz
+## 5 12          4 DocumentAuthor  Jeffrey S.      Stoff
+## 6 13          4 DocumentAuthor    Jonathan Himmelfarb</code></pre>
+<pre class="r"><code>unique(authors$contribution)</code></pre>
+<pre><code>## [1] &quot;DocumentAuthor&quot; &quot;DocumentEditor&quot;</code></pre>
+<p>The contribution field specifies whether the entry refers to an author or an editor. We reduce the table to our documents of interest and filter out the editors. To concatenate all of the authors into one string, we first concatenate the <code>lastName</code> and <code>firstName</code> using the <code>paste</code> function, then group by document and collapse each of the authors into one string, separated by a semi-colon (;), again using the <code>paste</code> funtion with the <code>collapse</code> option set.</p>
+<pre class="r"><code># Collect and concatenate authors for all relevant documents
+relevant.authors &lt;- authors %&gt;%
+  filter(contribution == &quot;DocumentAuthor&quot;,
+         documentId %in% relevant.papers) %&gt;%
+  mutate(fullName = paste(lastName,firstNames,sep=&quot;, &quot;)) %&gt;% # Concatenate first and last name
+  select(documentId,fullName)</code></pre>
+<pre><code>##   documentId               fullName
+## 1        196   Oentaryo, Richard J.
+## 2        196           Lim, Ee-Peng
+## 3        196 Chua, Freddy Chong Tat
+## 4        196           Low, Jia-Wei
+## 5        196              Lo, David
+## 6        215        Cortes, Corinna</code></pre>
+<pre class="r"><code>relevant.authors &lt;- relevant.authors %&gt;%
+  group_by(documentId) %&gt;%
+  summarize(authorsNames = paste(fullName,collapse=&quot;; &quot;)) # Concatenate all authors of a document together</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   documentId                                authorsNames
+##        &lt;int&gt;                                       &lt;chr&gt;
+## 1        196 Oentaryo, Richard J.; Lim, Ee-Peng; Chua...
+## 2        215 Cortes, Corinna; Pregibon, Daryl; Volins...
+## 3        224             Paul, Subhadeep; Chen, Yuguo...
+## 4        232 Durante, Daniele; Mukherjee, Nabanita; S...
+## 5        249 Bazzi, Marya; Jeub, Lucas G. S.; Arenas,...
+## 6        264 Oselio, Brandon; Kulesza, Alex; Hero, Al...</code></pre>
+<p>The tags associated with each document can be extracted and concatenated in a similar manner to the authors. Tags are located in the “DocumentTags” table.</p>
+<pre class="r"><code>dbListFields(mendeley.connection,&quot;DocumentTags&quot;)</code></pre>
+<pre><code>## [1] &quot;documentId&quot; &quot;tag&quot;</code></pre>
+<pre class="r"><code># Collect and concatenate tags for all relevant documents
+relevant.tags &lt;- extract.table(mendeley.connection, &quot;SELECT * FROM DocumentTags&quot;) %&gt;%
+  filter(documentId %in% relevant.papers) %&gt;%
+  group_by(documentId) %&gt;%
+  summarize(tagList = paste(tag,collapse=&quot;; &quot;))</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   documentId                                     tagList
+##        &lt;int&gt;                                       &lt;chr&gt;
+## 1        196                           social network...
+## 2        215 dynamic network; edge addition; node add...
+## 3        224 Newman-Girvan null model; SBM; community...
+## 4        232      dynamic network; multilayer network...
+## 5        249 Multilayer networks; community detection...
+## 6        264 dynamic SBM; dynamic network; multilayer...</code></pre>
+<p>Finally, we collect the document notes, located in the <code>FileNotes</code> table. In general, these would be stored similarly to tags, with one note per row and document ID specified, and can therefore be treated in the same manner as the tags to obtain a single string for each document. In my case, I had been annotating each paper in this folder with two notes, one for the main goal of each paper, introduced by “Goal:”, and one for the key insights or techniques used in the article, introduced by “Key:”. I classified each note into a <code>type</code> based on whether it represented a “Goal” or “Key” by splitting the note string by colon (:) and inspecting the first token.</p>
+<pre class="r"><code>dbListFields(mendeley.connection,&quot;FileNotes&quot;)</code></pre>
+<pre><code>##  [1] &quot;id&quot;           &quot;author&quot;       &quot;uuid&quot;         &quot;documentId&quot;  
+##  [5] &quot;fileHash&quot;     &quot;page&quot;         &quot;x&quot;            &quot;y&quot;           
+##  [9] &quot;note&quot;         &quot;modifiedTime&quot; &quot;createdTime&quot;  &quot;unlinked&quot;    
+## [13] &quot;baseNote&quot;     &quot;color&quot;        &quot;profileUuid&quot;</code></pre>
+<pre class="r"><code># Collect notes
+relevant.notes &lt;- extract.table(mendeley.connection,&quot;SELECT documentId, note FROM FileNotes&quot;) %&gt;%
+  filter(documentId %in% relevant.papers) %&gt;%
+  rowwise() %&gt;%
+  mutate(type = tolower(trimws(unlist(strsplit(note,split=&quot;:&quot;)))[1]), # Extract for each document whether it is a &#39;Goal&#39; or a &#39;Key&#39;
+         note = paste(unlist(strsplit(note,split=&quot;:&quot;))[-1],collapse=&quot;:&quot;)) %&gt;% # Extract the actual note
+  ungroup() </code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   documentId                                        note  type
+##        &lt;int&gt;                                       &lt;chr&gt; &lt;chr&gt;
+## 1        249  Community detection in multilayer netwo...  goal
+## 2        249  Generate random multilayer partitions w...   key
+## 3        215  Survey of computational methods for dyn...  goal
+## 4        329  Network fusion for composite community ...   key
+## 5        329  Community detection in multilayer netwo...  goal
+## 6        328  Define a statistical model for dynamic ...  goal</code></pre>
+<p>Finally, to tidy the data such that each document is on its own row, I use the <code>spread</code> function in <code>tidyr</code>, which creates an individual variable for each <code>type</code>, whose entry for each document contains the relevant note.</p>
+<pre class="r"><code>relevant.notes &lt;- relevant.notes %&gt;%
+  spread(type,note)</code></pre>
+<pre><code>##   documentId                              goal
+## 1        196  Exploit multiple types of soc...
+## 2        215  Survey of computational metho...
+## 3        224  Community detection in multil...
+## 4        232  Flexible model fo dynamic mul...
+## 5        249  Community detection in multil...
+## 6        264  Estimate the true adjacency m...
+##                                 key
+## 1  Collective semi-supervised le...
+## 2                             NA...
+## 3  Newman-Girvan modularity or e...
+## 4  Characterize edges as conditi...
+## 5  Generate random multilayer pa...
+## 6  Latent variable model which d...</code></pre>
+<p>At this point, We have collected all of our desired information, and it’s a simple matter of joining all the tables together, using <code>documentId</code> as the primary key.</p>
+<pre class="r"><code># Join the datasets together
+relevant.files &lt;- relevant.documents %&gt;%
+  left_join(relevant.authors, by=&quot;documentId&quot;) %&gt;%
+  left_join(relevant.tags, by=&quot;documentId&quot;) %&gt;%
+  left_join(relevant.notes, by=&quot;documentId&quot;)</code></pre>
+<pre><code>##   documentId  citationKey                             title
+## 1        196 Oentaryo2016 Collective semi-supervised lea...
+## 2        215   Cortes2003 Computational methods for dyna...
+## 3        224     Paul2016 Null models and modularity bas...
+## 4        232  Durante2016 Bayesian Learning of Dynamic M...
+## 5        249        Bazzi Generative Benchmark Models fo...
+## 6        264   Oselio2014 Multi-Layer Graph Analysis for...
+##                        authorsNames                           tagList
+## 1 Oentaryo, Richard J.; Lim, Ee-...                 social network...
+## 2 Cortes, Corinna; Pregibon, Dar... dynamic network; edge addition...
+## 3   Paul, Subhadeep; Chen, Yuguo... Newman-Girvan null model; SBM;...
+## 4 Durante, Daniele; Mukherjee, N... dynamic network; multilayer ne...
+## 5 Bazzi, Marya; Jeub, Lucas G. S... Multilayer networks; community...
+## 6 Oselio, Brandon; Kulesza, Alex... dynamic SBM; dynamic network; ...
+##                                goal                               key
+## 1  Exploit multiple types of soc...  Collective semi-supervised le...
+## 2  Survey of computational metho...                             NA...
+## 3  Community detection in multil...  Newman-Girvan modularity or e...
+## 4  Flexible model fo dynamic mul...  Characterize edges as conditi...
+## 5  Community detection in multil...  Generate random multilayer pa...
+## 6  Estimate the true adjacency m...  Latent variable model which d...</code></pre>
+<p>The final data frame is ready for any kind of fancy analysis, or can be exported to CSV format (or whatever format you prefer).</p>
+<p>That’s basically it for now, but check back soon! I do plan on having some more interesting posts coming up shortly…</p>

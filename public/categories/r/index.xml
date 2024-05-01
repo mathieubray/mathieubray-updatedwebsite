@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on Website</title>
+    <link>http://localhost:4321/categories/r/</link>
+    <description>Recent content in R on Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 25 Nov 2017 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:4321/categories/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Exploratory Analysis on SNL Episode Ratings</title>
+      <link>http://localhost:4321/2017/11/25/snl-charts/</link>
+      <pubDate>Sat, 25 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/2017/11/25/snl-charts/</guid>
+      
+        <description>Code and data can be found on Github
+Figured I should chime in here since it’s been… let’s see here… ah, 4 months.</description>
+      
+    </item>
+    
+    <item>
+      <title>An Introduction to Kidney Paired Donation, with ompr and ggraph</title>
+      <link>http://localhost:4321/2017/07/19/introduction-kidney-paired-donation/</link>
+      <pubDate>Wed, 19 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/2017/07/19/introduction-kidney-paired-donation/</guid>
+      
+        <description>Code for this worked example can be found on Github</description>
+      
+    </item>
+    
+    <item>
+      <title>Interactive NCAA Hockey Player Maps using ggmap, ggimage, ggiraph, and leaflet</title>
+      <link>http://localhost:4321/2017/05/24/ncaa-hockey-maps/</link>
+      <pubDate>Wed, 24 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/2017/05/24/ncaa-hockey-maps/</guid>
+      
+        <description>Code for the maps can be found on Github</description>
+      
+    </item>
+    
+    <item>
+      <title>Extract Mendeley Notes Using R</title>
+      <link>http://localhost:4321/2017/03/29/extract-notes-mendeley/</link>
+      <pubDate>Wed, 29 Mar 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/2017/03/29/extract-notes-mendeley/</guid>
+      
+        <description>Code for this analysis is availabile on Github
+Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R.</description>
+      
+    </item>
+    
+    <item>
+      <title>Text Analysis of NHL Hockey Coach Interviews</title>
+      <link>http://localhost:4321/2017/02/11/text-analysis-hockey-coaches/</link>
+      <pubDate>Sat, 11 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/2017/02/11/text-analysis-hockey-coaches/</guid>
+      
+        <description>Code for this analysis is availabile on Github
+In the 2016 NHL playoffs, the Eastern Conference champion Pittsburgh Penguins, coached by Mike Sullivan, defeated the Western Conference champion San Jose Sharks, coached by Peter DeBoer, in a best of seven series to win the fourth Stanley Cup in their franchise’s history.</description>
+      
+    </item>
+    
+    <item>
+      <title>Hello World!</title>
+      <link>http://localhost:4321/2016/12/23/hello-world/</link>
+      <pubDate>Fri, 23 Dec 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:4321/2016/12/23/hello-world/</guid>
+      
+        <description>Code for this analysis is availabile on Github
+I plan on using this space to post my musings on statistics that, shall we say, fall outside of the hallowed halls of academia.</description>
+      
+    </item>
+    
+  </channel>
+</rss>
