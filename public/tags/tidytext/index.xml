@@ -15,7 +15,7 @@
       <guid>http://localhost:4321/2017/02/11/text-analysis-hockey-coaches/</guid>
       
         <description>Code for this analysis is availabile on Github
-In the 2016 NHL playoffs, the Eastern Conference champion Pittsburgh Penguins, coached by Mike Sullivan, defeated the Western Conference champion San Jose Sharks, coached by Peter DeBoer, in a best of seven series to win the fourth Stanley Cup in their franchise’s history.</description>
+In the 2016 NHL playoffs, the Eastern Conference champion Pittsburgh Penguins, coached by Mike Sullivan, defeated the Western Conference champion San Jose Sharks, coached by Peter DeBoer, in a best of seven series to win the fourth Stanley Cup in their franchise’s history. In a series like this, with many ups and downs for both teams, the coach, serving as a spokesman for his team to the media, is under especially high pressure. Can this pressure be gleaned through a text analysis on their words in pre- and post-game interviews? Are there differences between the two coaches in terms of how they relay their mindset to the public?</description>
       
     </item>
     

@@ -135,8 +135,8 @@
 
   
   <meta name="twitter:card" content="summary"><meta name="twitter:title" content="Extract Mendeley Notes Using R">
-<meta name="twitter:description" content="Code for this analysis is availabile on Github
-Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R.">
+<meta name="twitter:description" content="Code for this analysis is available on Github.
+Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R. Basically I was having a similar problem as Daniel Hynk here, which he solved using Python. I too use Mendeley as a reference manager, which also has the handy feature of allowing users to add their own annotations and notes to their saved documents. While I have been generally satisfied with Mendeley, I was in a situation where I wanted to put together a table containing some information on a set of papers I had been reading, including, in particular, the notes I had been adding.">
 
 
 
@@ -144,8 +144,8 @@ Thought I would offer up a quick post on something that had sidetracked me earli
   <meta property="og:url" content="http://localhost:4321/2017/03/29/extract-notes-mendeley/">
   <meta property="og:site_name" content="Website">
   <meta property="og:title" content="Extract Mendeley Notes Using R">
-  <meta property="og:description" content="Code for this analysis is availabile on Github
-Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R.">
+  <meta property="og:description" content="Code for this analysis is available on Github.
+Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R. Basically I was having a similar problem as Daniel Hynk here, which he solved using Python. I too use Mendeley as a reference manager, which also has the handy feature of allowing users to add their own annotations and notes to their saved documents. While I have been generally satisfied with Mendeley, I was in a situation where I wanted to put together a table containing some information on a set of papers I had been reading, including, in particular, the notes I had been adding.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -170,7 +170,7 @@ Thought I would offer up a quick post on something that had sidetracked me earli
         "alternativeHeadline": "",
         "description": "
       
-        Code for this analysis is availabile on Github\nThought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R.
+        Code for this analysis is available on Github.\nThought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R. Basically I was having a similar problem as Daniel Hynk here, which he solved using Python. I too use Mendeley as a reference manager, which also has the handy feature of allowing users to add their own annotations and notes to their saved documents. While I have been generally satisfied with Mendeley, I was in a situation where I wanted to put together a table containing some information on a set of papers I had been reading, including, in particular, the notes I had been adding.
 
 
       
@@ -471,7 +471,7 @@ Thought I would offer up a quick post on something that had sidetracked me earli
       
 
 
-<p><em>Code for this analysis is availabile on <a href="https://gist.github.com/mathieubray/c7073f542f54b52d93247544521ad4a2">Github</a></em></p>
+<p><em>Code for this analysis is available on <a href="https://gist.github.com/mathieubray/c7073f542f54b52d93247544521ad4a2">Github.</a></em></p>
 <p>Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in <a href="https://www.mendeley.com/">Mendeley</a> using R. Basically I was having a similar problem as Daniel Hynk <a href="http://danielhnyk.cz/export-pdf-annotations-mendeley-csv-or-txt/">here</a>, which he solved using Python. I too use Mendeley as a reference manager, which also has the handy feature of allowing users to add their own annotations and notes to their saved documents. While I have been generally satisfied with Mendeley, I was in a situation where I wanted to put together a table containing some information on a set of papers I had been reading, including, in particular, the notes I had been adding. Unfortunately, Mendeley does not offer a simple option for doing this (some information is available for export to .bib or .xml).</p>
 <p>Anyway, Mendeley stores all the information about a user’s account locally in an SQLite database. We can connect to this database and extract the information, including the notes. I’m not sure how much this tutorial will generalize to other reference management software suites, but I imagine the underlying mechanics are similar. This tutorial can also be treated as an introduction to database interaction using the <code>RSQLite</code> package, available from <a href="https://cran.r-project.org/web/packages/RSQLite/RSQLite.pdf">CRAN</a>.</p>
 <p>As always, let’s start by loading some handy libraries.</p>
@@ -718,7 +718,7 @@ relevant.files &lt;- relevant.documents %&gt;%
     </div>
 
     <div id="comment">
-          <h2>comments</h2>
+          <h3>Comments</h3>
           <div id="disqus_thread"></div>
 <script>
     window.disqus_config = function () {

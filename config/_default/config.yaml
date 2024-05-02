@@ -3,7 +3,7 @@ languageCode: en
 DefaultContentLanguage: en
 title: Mathieu Bray
 theme: anatole
-summarylength: 10
+summarylength: 100
 enableEmoji: yes
 enableRobotsTXT: yes
 pygmentsUseClasses: yes

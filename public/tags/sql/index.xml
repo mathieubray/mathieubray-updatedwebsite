@@ -15,7 +15,7 @@
       <guid>http://localhost:4321/2017/03/29/extract-notes-mendeley/</guid>
       
         <description>Code for this analysis is availabile on Github
-Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R.</description>
+Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R. Basically I was having a similar problem as Daniel Hynk here, which he solved using Python. I too use Mendeley as a reference manager, which also has the handy feature of allowing users to add their own annotations and notes to their saved documents. While I have been generally satisfied with Mendeley, I was in a situation where I wanted to put together a table containing some information on a set of papers I had been reading, including, in particular, the notes I had been adding.</description>
       
     </item>
     

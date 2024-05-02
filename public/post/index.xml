@@ -14,8 +14,9 @@
       
       <guid>http://localhost:4321/2017/11/25/snl-charts/</guid>
       
-        <description>Code and data can be found on Github
-Figured I should chime in here since it’s been… let’s see here… ah, 4 months.</description>
+        <description>Code and data can be found on Github.
+Figured I should chime in here since it’s been… let’s see here… ah, 4 months. I had previously promised to write about some NCAA hockey projects I had been working on. That… will have to wait -_-. In the meantime, let’s look instead at some Saturday Night Live data!
+For those not familiar, Saturday Night Live, commonly abbreviated as ‘SNL’, is a comedy-variety show that airs live on NBC on select Saturday nights over the course of a ‘season’, which runs from September through May. SNL first aired in 1975, and is currently airing its 43rd season.</description>
       
     </item>
     
@@ -26,7 +27,9 @@ Figured I should chime in here since it’s been… let’s see here… ah, 4 mo
       
       <guid>http://localhost:4321/2017/07/19/introduction-kidney-paired-donation/</guid>
       
-        <description>Code for this worked example can be found on Github</description>
+        <description>Code for this worked example can be found on Github.
+While most of my work posted here over the past year has been inspired by hockey statistics, the majority of my time is spent doing actual work on a much more important problem.
+Let’s say you know someone in need of a kidney transplant, and after careful reflection on the risks, you are willing to donate one of your kidneys to your friend. This is one option for kidney transplant candidates, to avoid potentially long waits on the deceased donor list and improve their quality of life compared to continued dialysis.</description>
       
     </item>
     
@@ -37,7 +40,9 @@ Figured I should chime in here since it’s been… let’s see here… ah, 4 mo
       
       <guid>http://localhost:4321/2017/05/24/ncaa-hockey-maps/</guid>
       
-        <description>Code for the maps can be found on Github</description>
+        <description>Code for the maps can be found on Github.
+Note that some of the maps on this page are static. To interact with the maps, visit the Shiny app.
+Been looking at some NCAA hockey data lately. Have a few ideas kicking around, none of which are really beyond the idea stage at this point… In the meantime, since I haven’t posted anything in a while, I figured I could at least put up something fun. So here are some maps of the men’s NCAA hockey players’ hometowns, which I made using a bunch of packages in R, namely ggmap, ggimage, ggiraph and leaflet.</description>
       
     </item>
     
@@ -48,8 +53,8 @@ Figured I should chime in here since it’s been… let’s see here… ah, 4 mo
       
       <guid>http://localhost:4321/2017/03/29/extract-notes-mendeley/</guid>
       
-        <description>Code for this analysis is availabile on Github
-Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R.</description>
+        <description>Code for this analysis is available on Github.
+Thought I would offer up a quick post on something that had sidetracked me earlier this week, namely how to extract notes and annotations in Mendeley using R. Basically I was having a similar problem as Daniel Hynk here, which he solved using Python. I too use Mendeley as a reference manager, which also has the handy feature of allowing users to add their own annotations and notes to their saved documents. While I have been generally satisfied with Mendeley, I was in a situation where I wanted to put together a table containing some information on a set of papers I had been reading, including, in particular, the notes I had been adding.</description>
       
     </item>
     
@@ -60,8 +65,8 @@ Thought I would offer up a quick post on something that had sidetracked me earli
       
       <guid>http://localhost:4321/2017/02/11/text-analysis-hockey-coaches/</guid>
       
-        <description>Code for this analysis is availabile on Github
-In the 2016 NHL playoffs, the Eastern Conference champion Pittsburgh Penguins, coached by Mike Sullivan, defeated the Western Conference champion San Jose Sharks, coached by Peter DeBoer, in a best of seven series to win the fourth Stanley Cup in their franchise’s history.</description>
+        <description>Code for this analysis is available on Github.
+In the 2016 NHL playoffs, the Eastern Conference champion Pittsburgh Penguins, coached by Mike Sullivan, defeated the Western Conference champion San Jose Sharks, coached by Peter DeBoer, in a best of seven series to win the fourth Stanley Cup in their franchise’s history. In a series like this, with many ups and downs for both teams, the coach, serving as a spokesman for his team to the media, is under especially high pressure. Can this pressure be gleaned through a text analysis on their words in pre- and post-game interviews? Are there differences between the two coaches in terms of how they relay their mindset to the public?</description>
       
     </item>
     
@@ -72,8 +77,10 @@ In the 2016 NHL playoffs, the Eastern Conference champion Pittsburgh Penguins, c
       
       <guid>http://localhost:4321/2016/12/23/hello-world/</guid>
       
-        <description>Code for this analysis is availabile on Github
-I plan on using this space to post my musings on statistics that, shall we say, fall outside of the hallowed halls of academia.</description>
+        <description>Code for this analysis is available on Github.
+I plan on using this space to post my musings on statistics that, shall we say, fall outside of the hallowed halls of academia. For the most part, this will mean lots of R, and lots of hockey and Twitter data. I hope to share something interesting every few weeks, though with my ultra hectic (wink) grad student life, we’ll see how long I can keep that promise…
+For now here’s a few snippets of code to show I can make my way around R.
+A Quick Example - Working with Hockey DataSay we were interested in figuring out how many goals were scored against the Montreal Canadiens in a given season.</description>
       
     </item>
     

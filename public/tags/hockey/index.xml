@@ -14,7 +14,9 @@
       
       <guid>http://localhost:4321/2017/05/24/ncaa-hockey-maps/</guid>
       
-        <description>Code for the maps can be found on Github</description>
+        <description>Code for the maps can be found on Github
+Note that some of the maps on this page are static. To interact with the maps, visit the Shiny app
+Been looking at some NCAA hockey data lately. Have a few ideas kicking around, none of which are really beyond the idea stage at this point… In the meantime, since I haven’t posted anything in a while, I figured I could at least put up something fun. So here are some maps of the men’s NCAA hockey players’ hometowns, which I made using a bunch of packages in R, namely ggmap, ggimage, ggiraph and leaflet.</description>
       
     </item>
     
@@ -26,7 +28,7 @@
       <guid>http://localhost:4321/2017/02/11/text-analysis-hockey-coaches/</guid>
       
         <description>Code for this analysis is availabile on Github
-In the 2016 NHL playoffs, the Eastern Conference champion Pittsburgh Penguins, coached by Mike Sullivan, defeated the Western Conference champion San Jose Sharks, coached by Peter DeBoer, in a best of seven series to win the fourth Stanley Cup in their franchise’s history.</description>
+In the 2016 NHL playoffs, the Eastern Conference champion Pittsburgh Penguins, coached by Mike Sullivan, defeated the Western Conference champion San Jose Sharks, coached by Peter DeBoer, in a best of seven series to win the fourth Stanley Cup in their franchise’s history. In a series like this, with many ups and downs for both teams, the coach, serving as a spokesman for his team to the media, is under especially high pressure. Can this pressure be gleaned through a text analysis on their words in pre- and post-game interviews? Are there differences between the two coaches in terms of how they relay their mindset to the public?</description>
       
     </item>
     
@@ -38,7 +40,9 @@ In the 2016 NHL playoffs, the Eastern Conference champion Pittsburgh Penguins, c
       <guid>http://localhost:4321/2016/12/23/hello-world/</guid>
       
         <description>Code for this analysis is availabile on Github
-I plan on using this space to post my musings on statistics that, shall we say, fall outside of the hallowed halls of academia.</description>
+I plan on using this space to post my musings on statistics that, shall we say, fall outside of the hallowed halls of academia. For the most part, this will mean lots of R, and lots of hockey and Twitter data. I hope to share something interesting every few weeks, though with my ultra hectic (wink) grad student life, we’ll see how long I can keep that promise…
+For now here’s a few snippets of code to show I can make my way around R.
+A Quick Example - Working with Hockey DataSay we were interested in figuring out how many goals were scored against the Montreal Canadiens in a given season.</description>
       
     </item>
     

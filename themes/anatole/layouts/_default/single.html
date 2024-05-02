@@ -83,7 +83,7 @@
     {{ if and (or (eq .Type "post") (eq .Type .Site.Params.postSectionName)) (ne .Page.Params.disableComments true) }}
       {{- if .Site.DisqusShortname -}}
         <div id="comment">
-          <h2>{{ i18n "comments" }}</h2>
+          <h3>{{ i18n "comments" }}</h3>
           {{ template "_internal/disqus.html" . }}
         </div>
       {{- end -}}
